@@ -1,0 +1,8 @@
+streamlit
+librosa
+praat-parselmouth
+numpy
+scipy
+fpdf2
+cryptography
+PyPDF2
