@@ -1,8 +1,10 @@
-streamlit
-librosa
-praat-parselmouth
+streamlit==1.50.0
+librosa==0.11.0
+praat-parselmouth==0.4.7
+fpdf2==2.8.4
+pycryptodome==3.21.0
+matplotlib
+plotly
+qrcode
 numpy
 scipy
-fpdf2
-cryptography
-PyPDF2
