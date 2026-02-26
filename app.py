@@ -827,10 +827,7 @@ elif st.session_state.step == 4:
             
             with open(encrypted_pdf, "rb") as pdf_file:
                 pdf_data = pdf_file.read()
-                b64_pdf = base64.b64encode(pdf_data).decode('utf-8')
                 
-            href = f'<a href="data:application/pdf;base64,{b64_pdf}" download="{encrypted_pdf}" style="text-decoration:none;"><button style="background:rgba(50, 205, 50, 0.1); border:1px solid #32CD32; color:#32CD32; padding:10px 20px; border-radius:30px; cursor:pointer; font-weight:600; width:100%;">⏬ Download Encrypted PDF</button></a>'
-            
             # --- EMAIL DISPATCH HANDLING (Two-Factor Handover) ---
             email_sent = False
             if send_email and patient_email:
@@ -838,7 +835,7 @@ elif st.session_state.step == 4:
                 if success:
                     email_sent = True
                 else:
-                    st.error(msg)
+                    st.warning(msg) # Changed to warning so it doesn't look like a crash!
             
             # --- MAGICAL HANDOVER UI ---
             st.markdown("---")
@@ -854,9 +851,20 @@ elif st.session_state.step == 4:
                 
             st.markdown("<p style='color: #94A3B8; margin-bottom: 20px;'>For your privacy, please use the unique Access Key below to open the file.</p>", unsafe_allow_html=True)
             
-            # The Secure Key Box
-            st.code(access_key, language="plaintext")
-            st.markdown(href, unsafe_allow_html=True)
+            # The Secure Key Box (Beautifully Styled)
+            st.markdown(f"""
+            <div style="background-color: #0A192F; padding: 15px; border-radius: 10px; border: 1px solid #F7CAC9; font-size: 26px; font-weight: bold; font-family: monospace; letter-spacing: 3px; color: #FFF; margin-bottom: 20px;">
+                {access_key}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            st.download_button(
+                label="⏬ Download Encrypted PDF",
+                data=pdf_data,
+                file_name=encrypted_pdf,
+                mime="application/pdf",
+                use_container_width=True
+            )
             
             st.markdown("</div>", unsafe_allow_html=True)
 
