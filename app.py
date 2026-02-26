@@ -194,11 +194,12 @@ css = """
     div[data-testid="stAudioInput"] button svg, 
     div[data-testid="stAudioInput"] button svg * {
         /* Let SVG use currentColor cleanly without overriding fill/stroke which breaks the shape */
+        color: #F8F9FA !important;
     }
     
     div[data-testid="stAudioInput"] * {
-        color: #F8F9FA !important; /* Make sure time codes and button icons are white */
-        font-weight: 500 !important;
+        color: #0A192F !important; /* Force timer and timestamps to dark navy */
+        font-weight: 700 !important;
     }
     
     /* Silk Ribbon Waveform Glow */
