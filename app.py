@@ -9,7 +9,6 @@ import librosa
 import numpy as np
 import io
 import plotly.graph_objects as go
-from pydub import AudioSegment
 import smtplib
 from email.message import EmailMessage
 import ssl
