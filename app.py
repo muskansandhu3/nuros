@@ -10,6 +10,9 @@ import numpy as np
 import io
 import plotly.graph_objects as go
 from pydub import AudioSegment
+import smtplib
+from email.message import EmailMessage
+import ssl
 from audio_analysis import extract_features
 from risk_scoring import calculate_risk
 from report_agent import generate_report, encrypt_pdf
@@ -389,6 +392,7 @@ if st.session_state.step == 1:
                 
     with col_city:
         city = st.text_input("Location (City)", value=st.session_state.patient_profile.get("city", ""))
+        email_addr = st.text_input("Patient Email (for Report)", value=st.session_state.patient_profile.get("email", ""))
         
     if st.button("Next: Environmental Baseline ➔", disabled=not is_adult):
         if first_name and last_name and is_adult:
@@ -398,7 +402,8 @@ if st.session_state.step == 1:
                 "first_name": first_name,
                 "last_name": last_name,
                 "dob": dob.strftime("%Y-%m-%d"),
-                "city": city
+                "city": city,
+                "email": email_addr
             })
             next_step()
             st.rerun()
@@ -735,6 +740,11 @@ elif st.session_state.step == 4:
     st.write("Generate a HIPAA-compliant, encrypted PDF summary encoded with a Digital Seal of Authenticity.")
     
     patient_id = "PAT-" + str(uuid.uuid4())[:8].upper()
+    patient_email = st.session_state.patient_profile.get("email", "")
+    
+    send_email = False
+    if patient_email:
+        send_email = st.checkbox(f"Automatically email secure report & password to **{patient_email}**", value=True)
     
     if st.button("Generate Secure 3D Report"):
         with st.spinner("Compiling Premium Clinical Summary PDF..."):
@@ -757,10 +767,43 @@ elif st.session_state.step == 4:
             st.success(f"Report securely generated! Unlock Password: **{patient_id}**")
             
             with open(encrypted_pdf, "rb") as pdf_file:
-                b64_pdf = base64.b64encode(pdf_file.read()).decode('utf-8')
+                pdf_data = pdf_file.read()
+                b64_pdf = base64.b64encode(pdf_data).decode('utf-8')
                 
             href = f'<a href="data:application/pdf;base64,{b64_pdf}" download="{encrypted_pdf}" style="text-decoration:none;"><button style="background:rgba(50, 205, 50, 0.1); border:1px solid #32CD32; color:#32CD32; padding:10px 20px; border-radius:30px; cursor:pointer; font-weight:600;">Download Premium PDF</button></a>'
             st.markdown(href, unsafe_allow_html=True)
+            
+            # --- EMAIL DISPATCH HANDLING ---
+            if send_email and patient_email:
+                try:
+                    # Attempt to pull credentials from Streamlit Secrets
+                    # To use this in production, set Secrets in the Streamlit Cloud Dashboard
+                    smtp_server = st.secrets.get("SMTP_SERVER", "smtp.gmail.com") if "SMTP_SERVER" in st.secrets else "smtp.gmail.com"
+                    smtp_port = st.secrets.get("SMTP_PORT", 465) if "SMTP_PORT" in st.secrets else 465
+                    smtp_user = st.secrets.get("SMTP_USER", "") if "SMTP_USER" in st.secrets else ""
+                    smtp_pass = st.secrets.get("SMTP_PASS", "") if "SMTP_PASS" in st.secrets else ""
+
+                    if smtp_user and smtp_pass:
+                        msg = EmailMessage()
+                        msg['Subject'] = 'Nuros: Your Confidential Acoustic Report'
+                        msg['From'] = smtp_user
+                        msg['To'] = patient_email
+                        
+                        fname = st.session_state.patient_profile.get("first_name", "Patient")
+                        msg.set_content(f"Hello {fname},\n\nPlease find your secure vocal biomarker analysis attached.\n\nYour Unlock Password: {patient_id}\n\nDo not share this password. This is not a diagnosis. To be fully evaluated, provide this report to your active clinician.\n\nBest,\nNuros System")
+                        
+                        msg.add_attachment(pdf_data, maintype='application', subtype='pdf', filename=encrypted_pdf)
+                        
+                        context = ssl.create_default_context()
+                        with smtplib.SMTP_SSL(smtp_server, smtp_port, context=context) as smtp:
+                            smtp.login(smtp_user, smtp_pass)
+                            smtp.send_message(msg)
+                            
+                        st.info(f"📧 Secure email successfully dispatched to **{patient_email}**!")
+                    else:
+                        st.warning("⚠️ Email server not configured. Please add `SMTP_USER` and `SMTP_PASS` to `st.secrets` in the Streamlit Dashboard to enable live emailing.")
+                except Exception as e:
+                    st.error(f"Failed to dispatch email: {str(e)}")
 
             # Cleanup
             time.sleep(1)
