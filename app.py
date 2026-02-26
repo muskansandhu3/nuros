@@ -870,22 +870,37 @@ elif st.session_state.step == 4:
             
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # --- FLOATING FEEDBACK FORM ---
-    @st.dialog("✨ Nuros Product Feedback", width="large")
+    # --- FLOATING MARKET VALIDATION FEEDBACK FORM ---
+    @st.dialog("✨ Nuros Market Validation", width="large")
     def feedback_dialog():
         if st.session_state.get("feedback_submitted"):
-            st.success("Thank you for helping us close the gap in women's health innovation in Brampton. Your feedback is being used for our TMU Launch Fellowship application.")
+            st.success("Thank you! Your feedback is being used as 'Market Validation Data'.")
         else:
-            st.markdown("**Help us refine the future of clinical vocal biomarkers for the TMU Launch Fellowship.**")
+            st.markdown("**Help us refine the future of clinical vocal biomarkers and close the gap in Women's Health.**")
             with st.form("feedback_form"):
-                st.slider("1. How intuitive was the UI/UX? (1-10)", 1, 10, 9)
-                st.text_area("2. Did the 'Aura-Silk' dashboard feel secure and medical-grade?")
-                st.text_area("3. Were the results and terminology clearly understandable?")
-                st.radio("4. Likelihood of integrating this into a local clinical setting:", ["Highly Likely", "Neutral", "Unlikely"])
-                st.text_area("5. What features or capabilities are we missing?")
+                q1 = st.radio("1. Would sharing this automated report with your doctor save you time during appointments?", ["Yes", "No"])
+                q2 = st.slider("2. On a scale of 1-5, how secure did you feel using this 'Password-Protected' delivery system?", 1, 5, 5)
+                q3 = st.radio("3. Did you feel the 'Language Shield' accurately captured your voice despite your accent or primary language?", ["Yes", "No"])
+                q4 = st.slider("4. How valuable is having a dedicated 'Hormonal & Thyroid' vocal scanner to you?", 1, 10, 10)
+                q5 = st.text_area("5. Please provide one sentence on how Nuros could help you 'Age in Place' or manage your health at home.")
                 
-                submitted = st.form_submit_button("Submit Feedback")
+                submitted = st.form_submit_button("Submit Validation")
                 if submitted:
+                    import csv
+                    import os
+                    file_exists = os.path.isfile("validation_results.csv")
+                    try:
+                        with open("validation_results.csv", "a", newline="", encoding="utf-8") as f:
+                            writer = csv.writer(f)
+                            if not file_exists:
+                                writer.writerow(["Timestamp", "Admin Burden (Save Time)", "Trust (Security 1-5)", "Inclusion (Language Shield)", "Women's Health Value (1-10)", "Age in Place Testimonial"])
+                            writer.writerow([
+                                datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                q1, q2, q3, q4, q5
+                            ])
+                    except Exception as e:
+                        print("Failed to write to validation_results.csv:", e)
+
                     st.session_state.feedback_submitted = True
                     st.rerun()
 
@@ -900,8 +915,8 @@ elif st.session_state.step == 4:
     }
     .element-container:has(.feedback-anchor) + .element-container button {
         background: rgba(10, 25, 47, 0.7) !important; /* Deep navy base */
-        backdrop-filter: blur(20px) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
         border: 1px solid rgba(247, 202, 201, 0.3) !important; /* Rose quartz border */
         box-shadow: 0 4px 15px rgba(247, 202, 201, 0.1) !important;
         border-radius: 50px !important;
@@ -921,5 +936,5 @@ elif st.session_state.step == 4:
     <div class="feedback-anchor"></div>
     ''', unsafe_allow_html=True)
     
-    if st.button("✨ Share Feedback"):
+    if st.button("✨ Help Close the Gap in Women's Health"):
         feedback_dialog()
