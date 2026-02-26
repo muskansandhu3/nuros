@@ -148,6 +148,30 @@ css = """
     }
 
     /* High Contrast Audio Input Specifics */
+    
+    /* Streamlit Expander / Carousel Dark Mode Fix */
+    div[data-testid="stExpander"] {
+        background-color: rgba(10, 25, 47, 0.5) !important;
+        border: 1px solid rgba(159, 226, 191, 0.2) !important;
+        border-radius: 10px !important;
+    }
+    div[data-testid="stExpander"] details summary {
+        background-color: rgba(10, 25, 47, 0.8) !important;
+        color: #F8F9FA !important;
+        border-radius: 10px !important;
+    }
+    div[data-testid="stExpander"] details summary:hover {
+        background-color: rgba(159, 226, 191, 0.15) !important;
+        color: #fff !important;
+    }
+    div[data-testid="stExpander"] details summary svg {
+        fill: #9FE2BF !important; /* Make the dropdown chevron teal */
+    }
+    div[data-testid="stExpanderDetails"] {
+        background-color: rgba(10, 25, 47, 0.8) !important;
+        color: #E2E8F0 !important;
+    }
+    
     div[data-testid="stAudioInput"] {
         background-color: transparent !important;
         border: none !important;
