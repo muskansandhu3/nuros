@@ -78,16 +78,36 @@ css = """
         box-shadow: 0 15px 50px 0 rgba(247, 202, 201, 0.15), inset 0 0 30px rgba(247, 202, 201, 0.1);
     }
     
+    /* Strip default grey backgrounds from Streamlit input parents */
+    div[data-baseweb="input"],
+    div[data-baseweb="base-input"],
+    div[data-baseweb="select"],
+    div[data-baseweb="textarea"] {
+        background-color: transparent !important;
+        border: none !important;
+    }
+
     /* Input Styling - Airy and Light */
-    div[data-baseweb="input"] > div, div[data-baseweb="select"] > div, div[data-baseweb="textarea"] > div, div.stDateInput > div {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(247, 202, 201, 0.2) !important;
+    div[data-baseweb="input"] > div, 
+    div[data-baseweb="select"] > div, 
+    div[data-baseweb="textarea"] > div {
+        background-color: rgba(10, 25, 47, 0.5) !important; /* Deep navy slightly transparent */
+        border: 1px solid rgba(247, 202, 201, 0.3) !important;
         border-radius: 20px !important;
         color: #F8F9FA !important;
+        overflow: hidden !important;
     }
-    div[data-baseweb="input"] > div:hover, div[data-baseweb="select"] > div:hover, div[data-baseweb="textarea"] > div:hover {
-        border: 1px solid rgba(247, 202, 201, 0.5) !important;
-        box-shadow: 0 0 15px rgba(247, 202, 201, 0.1) !important;
+    div[data-baseweb="input"] > div:hover, 
+    div[data-baseweb="select"] > div:hover, 
+    div[data-baseweb="textarea"] > div:hover {
+        border: 1px solid rgba(247, 202, 201, 0.8) !important;
+        box-shadow: 0 0 15px rgba(247, 202, 201, 0.2) !important;
+    }
+    
+    /* Make the actual typing area perfectly transparent so we only see the customized wrapper */
+    input, textarea, select {
+        background-color: transparent !important;
+        color: #F8F9FA !important;
     }
 
     /* Metric Cards */
