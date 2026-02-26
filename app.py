@@ -898,10 +898,32 @@ elif st.session_state.step == 4:
                         print("Failed to write to validation_results.csv:", e)
 
                     st.session_state.feedback_submitted = True
-                    st.rerun()
+                    st.success("Thank you! Your feedback is being used as 'Market Validation Data'.")
 
     st.markdown('''
     <style>
+    /* Fix Dialog Form Text Legibility */
+    div[data-testid="stDialog"] * {
+        color: #0A192F !important; /* Deep Navy Font */
+    }
+    div[data-testid="stDialog"] div.stButton > button {
+        background-color: #0A192F !important;
+        color: #F8F9FA !important;
+        border: 1px solid #0A192F !important;
+        box-shadow: none !important;
+    }
+    div[data-testid="stDialog"] div.stButton > button:hover {
+        background-color: #16213E !important;
+        color: #FFF !important;
+    }
+    div[data-testid="stDialog"] div[data-baseweb="textarea"] > div,
+    div[data-testid="stDialog"] textarea,
+    div[data-testid="stDialog"] input {
+        background-color: transparent !important;
+        color: #0A192F !important;
+        border: 1px solid #CBD5E1 !important;
+    }
+    
     /* Use standard CSS :has() combinator + adjacent sibling to selectively target this exact button purely via CSS */
     .element-container:has(.feedback-anchor) + .element-container {
         position: fixed !important;
