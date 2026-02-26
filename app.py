@@ -849,3 +849,57 @@ elif st.session_state.step == 4:
             if os.path.exists(raw_pdf): os.remove(raw_pdf)
             
     st.markdown("</div>", unsafe_allow_html=True)
+
+    # --- FLOATING FEEDBACK FORM ---
+    @st.dialog("✨ Nuros Product Feedback", width="large")
+    def feedback_dialog():
+        if st.session_state.get("feedback_submitted"):
+            st.success("Thank you for helping us close the gap in women's health innovation in Brampton. Your feedback is being used for our TMU Launch Fellowship application.")
+        else:
+            st.markdown("**Help us refine the future of clinical vocal biomarkers for the TMU Launch Fellowship.**")
+            with st.form("feedback_form"):
+                st.slider("1. How intuitive was the UI/UX? (1-10)", 1, 10, 9)
+                st.text_area("2. Did the 'Aura-Silk' dashboard feel secure and medical-grade?")
+                st.text_area("3. Were the results and terminology clearly understandable?")
+                st.radio("4. Likelihood of integrating this into a local clinical setting:", ["Highly Likely", "Neutral", "Unlikely"])
+                st.text_area("5. What features or capabilities are we missing?")
+                
+                submitted = st.form_submit_button("Submit Feedback")
+                if submitted:
+                    st.session_state.feedback_submitted = True
+                    st.rerun()
+
+    st.markdown('''
+    <style>
+    /* Use standard CSS :has() combinator + adjacent sibling to selectively target this exact button purely via CSS */
+    .element-container:has(.feedback-anchor) + .element-container {
+        position: fixed !important;
+        bottom: 2rem !important;
+        right: 2rem !important;
+        z-index: 9999 !important;
+    }
+    .element-container:has(.feedback-anchor) + .element-container button {
+        background: rgba(10, 25, 47, 0.7) !important; /* Deep navy base */
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 1px solid rgba(247, 202, 201, 0.3) !important; /* Rose quartz border */
+        box-shadow: 0 4px 15px rgba(247, 202, 201, 0.1) !important;
+        border-radius: 50px !important;
+        color: #F8F9FA !important;
+        padding: 0.8rem 1.5rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+    }
+    .element-container:has(.feedback-anchor) + .element-container button:hover {
+        background: rgba(247, 202, 201, 0.15) !important; /* Rose quartz glow */
+        border: 1px solid rgba(247, 202, 201, 0.8) !important;
+        box-shadow: 0 0 25px rgba(247, 202, 201, 0.6) !important;
+        transform: translateY(-3px) !important;
+        color: #FFF !important;
+    }
+    </style>
+    <div class="feedback-anchor"></div>
+    ''', unsafe_allow_html=True)
+    
+    if st.button("✨ Share Feedback"):
+        feedback_dialog()
