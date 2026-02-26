@@ -5,7 +5,7 @@ import random
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad
-from PyPDF2 import PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
 import matplotlib.pyplot as plt
 import numpy as np
 import qrcode
@@ -259,7 +259,7 @@ def generate_report(patient_id, date, stability_score, risk_data, explanations, 
 
 def encrypt_pdf(input_pdf, password):
     """
-    Encrypt the PDF with a password for HIPAA compliance mock.
+    Encrypt the PDF with a password for HIPAA compliance mock using AES-256-R5.
     """
     reader = PdfReader(input_pdf)
     writer = PdfWriter()
@@ -267,7 +267,7 @@ def encrypt_pdf(input_pdf, password):
     for page in reader.pages:
         writer.add_page(page)
 
-    writer.encrypt(password)
+    writer.encrypt(password, algorithm="AES-256-R5")
     encrypted_filename = input_pdf.replace(".pdf", "_encrypted.pdf")
     
     with open(encrypted_filename, "wb") as f:
