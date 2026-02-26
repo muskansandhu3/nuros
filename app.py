@@ -302,6 +302,21 @@ if os.path.exists("banner.png"):
         mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
         opacity: 0.95;
     }}
+
+    /* Responsive adjustments for mobile screens */
+    @media (max-width: 768px) {{
+        .engraved-banner-container {{
+            margin-top: -1.5rem;
+            margin-bottom: 0.5rem;
+        }}
+        .engraved-banner {{
+            height: 220px;
+            background-position: center top;
+            /* Adjust mask to be slightly softer on small screens */
+            -webkit-mask-image: radial-gradient(ellipse 95% 95% at 50% 50%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+            mask-image: radial-gradient(ellipse 95% 95% at 50% 50%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+        }}
+    }}
     </style>
     <div class="engraved-banner-container">
         <div class="engraved-banner"></div>
