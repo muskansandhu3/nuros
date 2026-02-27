@@ -336,7 +336,7 @@ if os.path.exists("banner.png"):
     .engraved-banner {{
         width: 100%;
         max-width: 1100px;
-        aspect-ratio: 1024 / 630; /* Fine-tuned ratio to precisely show text across all screens */
+        aspect-ratio: 1024 / 530; /* Tighter ratio to exactly crop out the lower arms */
         height: auto;
         background-image: url("data:{mime_type};base64,{encoded_string}");
         background-size: cover;
