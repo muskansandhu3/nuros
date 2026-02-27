@@ -336,7 +336,7 @@ if os.path.exists("banner.png"):
     .engraved-banner {{
         width: 100%;
         max-width: 1100px;
-        aspect-ratio: 1024 / 490; /* Tightest ratio to crop exactly below the text */
+        aspect-ratio: 1024 / 515; /* Balanced ratio to show 'VOICE OF HEALTH AI' perfectly */
         height: auto;
         background-image: url("data:{mime_type};base64,{encoded_string}");
         background-size: cover;
