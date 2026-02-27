@@ -335,10 +335,10 @@ if os.path.exists("banner.png"):
     }}
     .engraved-banner {{
         width: 1100px;
-        height: 650px; /* Increased height */
+        height: 540px; /* Adjusted height to show logo but crop the bottom */
         max-width: 100vw;
         background-image: url("data:{mime_type};base64,{encoded_string}");
-        background-size: contain; /* Prevent cutting off Nuros logo */
+        background-size: cover; /* Cover the specified height */
         background-position: top center;
         background-repeat: no-repeat;
         /* Fade edges to merge into the dark navy background */
@@ -354,8 +354,8 @@ if os.path.exists("banner.png"):
             margin-bottom: 0.5rem;
         }}
         .engraved-banner {{
-            height: 350px; /* Increased height for mobile */
-            background-position: center top;
+            height: 280px; /* Adjusted height for mobile */
+            background-position: top center;
             /* Adjust mask to be slightly softer on small screens */
             -webkit-mask-image: radial-gradient(ellipse 95% 95% at 50% 50%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
             mask-image: radial-gradient(ellipse 95% 95% at 50% 50%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
