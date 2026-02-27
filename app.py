@@ -334,11 +334,12 @@ if os.path.exists("banner.png"):
         margin-bottom: 1rem;
     }}
     .engraved-banner {{
-        width: 1100px;
-        height: 540px; /* Adjusted height to show logo but crop the bottom */
-        max-width: 100vw;
+        width: 100%;
+        max-width: 1100px;
+        aspect-ratio: 1024 / 630; /* Fine-tuned ratio to precisely show text across all screens */
+        height: auto;
         background-image: url("data:{mime_type};base64,{encoded_string}");
-        background-size: cover; /* Cover the specified height */
+        background-size: cover;
         background-position: top center;
         background-repeat: no-repeat;
         /* Fade edges to merge into the dark navy background */
@@ -354,7 +355,8 @@ if os.path.exists("banner.png"):
             margin-bottom: 0.5rem;
         }}
         .engraved-banner {{
-            height: 280px; /* Adjusted height for mobile */
+            /* Remove explicit height to let aspect-ratio dynamically scale the image natively */
+            height: auto;
             background-position: top center;
             /* Adjust mask to be slightly softer on small screens */
             -webkit-mask-image: radial-gradient(ellipse 95% 95% at 50% 50%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
