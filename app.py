@@ -840,14 +840,7 @@ elif st.session_state.step == 4:
                 success, msg = send_encrypted_report(patient_email, pdf_data, encrypted_pdf)
                 if success:
                     email_sent = True
-                    
-                    # Schedule the access key email to be sent after 15 seconds in the background
-                    def delayed_key_email():
-                        time.sleep(15)
-                        send_access_key_email(patient_email, access_key)
-                        
-                    key_thread = threading.Thread(target=delayed_key_email)
-                    key_thread.start()
+                    send_access_key_email(patient_email, access_key)
                 else:
                     st.warning(msg) # Changed to warning so it doesn't look like a crash!
             
