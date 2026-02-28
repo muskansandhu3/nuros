@@ -140,7 +140,8 @@ css = """
     hr { border-color: rgba(247, 202, 201, 0.1); }
     
     /* High-Gloss Glass Sphere Buttons */
-    div.stButton > button {
+    div.stButton > button,
+    div.stDownloadButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         backdrop-filter: blur(15px) !important;
         -webkit-backdrop-filter: blur(15px) !important;
@@ -154,14 +155,16 @@ css = """
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
     }
-    div.stButton > button:hover {
+    div.stButton > button:hover,
+    div.stDownloadButton > button:hover {
         background: rgba(247, 202, 201, 0.15) !important;
         box-shadow: 0 0 25px rgba(247, 202, 201, 0.5) !important; /* Soft pulse of light */
         border: 1px solid rgba(247, 202, 201, 1) !important;
         color: #fff !important;
         transform: scale(1.05) !important; /* Expand slightly */
     }
-    div.stButton > button:active {
+    div.stButton > button:active,
+    div.stDownloadButton > button:active {
         box-shadow: 0 0 30px 10px rgba(247, 202, 201, 0.6) !important; /* Radial ripple */
         transform: scale(0.98) !important;
     }
