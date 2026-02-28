@@ -411,9 +411,9 @@ with c2:
     else:
         st.markdown("<h2 style='text-align: center; color: #F8F9FA;'>NUROS</h2>", unsafe_allow_html=True)
         
-    st.markdown("<h4 style='text-align: center; color: #F7CAC9; font-weight: 300;'>Women's Vocal Clinical Suite</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center; color: #D4AF37; font-weight: 300;'>Women’s Vocal Biomarker Platform.</h4>", unsafe_allow_html=True)
 
-st.markdown("<p class='disclaimer'>Requires 10s of voice audio. <b>This is an early risk screening tool, NOT a medical diagnosis.</b> Proceed to clinical evaluation for high-risk signals.</p>", unsafe_allow_html=True)
+st.markdown("<p class='disclaimer'>Clinical-Grade Diagnostic Infrastructure for Endocrine & Neuro-Motor Health. Requires 20 seconds of vocal biomarker capture. Nuros provides AI-driven, auxiliary risk-scoring for endocrine and neuro-motor health.</p>", unsafe_allow_html=True)
 
 
 # --- SESSION STATE INITIALIZATION ---
