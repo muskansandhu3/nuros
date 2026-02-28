@@ -11,7 +11,7 @@ import io
 import threading
 import plotly.graph_objects as go
 from security_utils import generate_secure_key
-from mailer import send_encrypted_report, send_access_key_email
+from mailer import send_encrypted_report, send_access_key_email, send_contact_form_emails
 from audio_analysis import extract_features
 from risk_scoring import calculate_risk
 from report_agent import generate_report, encrypt_pdf
@@ -966,9 +966,68 @@ elif st.session_state.step == 4:
         transform: translateY(-3px) !important;
         color: #FFF !important;
     }
+    
+    /* Contact Us Bubble Styling */
+    .element-container:has(.contact-anchor) + .element-container {
+        position: fixed !important;
+        bottom: 2rem !important;
+        left: 2rem !important;
+        z-index: 9999 !important;
+    }
+    .element-container:has(.contact-anchor) + .element-container button {
+        background: rgba(10, 43, 78, 0.8) !important; /* Deep Navy */
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(84, 185, 72, 0.4) !important; /* Green pop */
+        box-shadow: 0 4px 15px rgba(0,0,0, 0.2) !important;
+        border-radius: 50px !important;
+        color: #F8F9FA !important;
+        padding: 0.8rem 1.5rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+    }
+    .element-container:has(.contact-anchor) + .element-container button:hover {
+        background: rgba(84, 185, 72, 0.2) !important; 
+        border: 1px solid rgba(84, 185, 72, 0.8) !important;
+        box-shadow: 0 0 20px rgba(84, 185, 72, 0.4) !important;
+        transform: translateY(-3px) !important;
+        color: #FFF !important;
+    }
     </style>
     <div class="feedback-anchor"></div>
     ''', unsafe_allow_html=True)
     
     if st.button("✨ Help Close the Gap in Women's Health"):
         feedback_dialog()
+
+    # --- CONTACT US DIALOG ---
+    @st.dialog("📞 Contact Nuros", width="large")
+    def contact_dialog():
+        if st.session_state.get("contact_submitted"):
+            st.success("Thank you! Your message has been sent successfully.")
+        else:
+            st.markdown("**Get in touch with our Clinical Innovation Team.**")
+            with st.form("contact_form"):
+                contact_name = st.text_input("Full Name")
+                contact_phone = st.text_input("Phone Number")
+                contact_email = st.text_input("Email Address")
+                contact_msg = st.text_area("Message")
+                
+                submitted_contact = st.form_submit_button("Send Message")
+                if submitted_contact:
+                    if contact_name and contact_email and contact_msg:
+                        with st.spinner("Sending message..."):
+                            success, result_msg = send_contact_form_emails(
+                                contact_name, contact_phone, contact_email, contact_msg
+                            )
+                            if success:
+                                st.session_state.contact_submitted = True
+                                st.rerun()
+                            else:
+                                st.error(result_msg)
+                    else:
+                        st.warning("Please fill in Name, Email, and Message.")
+
+    st.markdown('<div class="contact-anchor"></div>', unsafe_allow_html=True)
+    if st.button("💬 Contact Us"):
+        contact_dialog()
