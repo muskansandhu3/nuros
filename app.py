@@ -404,8 +404,8 @@ with c2:
             encoded_string = base64.b64encode(image_file.read()).decode()
             mime_type = "image/jpeg" if logo_path.lower().endswith(('.jpg', '.jpeg')) else "image/png"
             st.markdown(f'''
-                <div class="logo-container">
-                    <img src="data:{mime_type};base64,{encoded_string}" class="nuros-logo" style="max-height: 80px;" alt="Nuros Logo">
+                <div class="logo-container" style="text-align: center; margin-bottom: 20px;">
+                    <img src="data:{mime_type};base64,{encoded_string}" class="nuros-logo" style="max-height: 200px; max-width: 100%; object-fit: contain;" alt="Nuros Logo">
                 </div>
             ''', unsafe_allow_html=True)
     else:

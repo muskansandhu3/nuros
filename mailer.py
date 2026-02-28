@@ -39,7 +39,7 @@ def send_encrypted_report(patient_email, pdf_data, pdf_filename):
                 break
                 
         logo_cid = f"{uuid.uuid4()}@nuros"
-        logo_html = f'<img src="cid:{logo_cid}" alt="NUROS" style="max-height: 80px; margin-bottom: 10px;">' if logo_path else '<h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>'
+        logo_html = f'<img src="cid:{logo_cid}" alt="NUROS" style="max-height: 120px; max-width: 100%; object-fit: contain; margin-bottom: 10px;">' if logo_path else '<h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>'
         
         html_report_content = f"""
         <html>
@@ -118,7 +118,7 @@ def send_access_key_email(patient_email, access_key):
                 break
                 
         logo_cid = f"{uuid.uuid4()}@nuros"
-        logo_html = f'<img src="cid:{logo_cid}" alt="NUROS" style="max-height: 80px; margin-bottom: 10px;">' if logo_path else '<h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>'
+        logo_html = f'<img src="cid:{logo_cid}" alt="NUROS" style="max-height: 120px; max-width: 100%; object-fit: contain; margin-bottom: 10px;">' if logo_path else '<h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>'
         
         html_key_content = f"""
         <html>
@@ -187,7 +187,7 @@ def send_contact_form_emails(name, phone, sender_email, message_txt):
                 break
                 
         logo_cid = f"{uuid.uuid4()}@nuros"
-        logo_html = f'<img src="cid:{logo_cid}" alt="NUROS" style="max-height: 80px; margin-bottom: 10px;">' if logo_path else '<h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>'
+        logo_html = f'<img src="cid:{logo_cid}" alt="NUROS" style="max-height: 120px; max-width: 100%; object-fit: contain; margin-bottom: 10px;">' if logo_path else '<h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>'
         
         # 1. Email to Admin
         msg_admin = EmailMessage()
