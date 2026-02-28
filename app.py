@@ -875,6 +875,25 @@ elif st.session_state.step == 4:
             )
             
             st.markdown("</div>", unsafe_allow_html=True)
+            
+            # --- DIAGNOSTIC METHODOLOGY SECTION (Clinical Authority UI) ---
+            st.markdown("<h3 style='margin-top: 30px;'>Diagnostic Methodology</h3>", unsafe_allow_html=True)
+            
+            pdf_href = "#"
+            meth_pdf_path = "NUROS_Clinical_Methodology.pdf"
+            if os.path.exists(meth_pdf_path):
+                with open(meth_pdf_path, "rb") as f:
+                    meth_data = f.read()
+                b64_meth = base64.b64encode(meth_data).decode()
+                pdf_href = f"data:application/pdf;base64,{b64_meth}"
+                
+            st.markdown(f"""
+            <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid #F7CAC9; border-radius: 15px; padding: 25px; margin-top: 10px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(247, 202, 201, 0.05);">
+                <p style="color: #E2E8F0; font-size: 1.05em; line-height: 1.6; margin-bottom: 0;">
+                    We believe in transparent, science-first diagnostics. ✨ <a href="{pdf_href}" target="_blank" download="NUROS_Clinical_Methodology.pdf" style="color: #F7CAC9; text-decoration: none; font-weight: bold; padding: 2px 6px; background: rgba(247, 202, 201, 0.1); border-radius: 5px; transition: all 0.2s;">📋 View Our Clinical Methodology</a> to see the physics-based markers and signal processing pipeline that generated this report.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
 
             # Cleanup
             time.sleep(1)
