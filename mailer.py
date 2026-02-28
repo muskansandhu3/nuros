@@ -2,6 +2,9 @@ import smtplib
 from email.message import EmailMessage
 import ssl
 import streamlit as st
+import os
+import mimetypes
+import uuid
 
 def send_encrypted_report(patient_email, pdf_data, pdf_filename):
     """
@@ -29,12 +32,21 @@ def send_encrypted_report(patient_email, pdf_data, pdf_filename):
             "Use the unique Access Key shown on your Nuros dashboard to unlock it."
         )
         
+        logo_path = None
+        for name in ['Nuros.png', 'nuros.png', 'logo.png', 'Nuros.jpg', 'nuros.jpg', 'logo.jpg', 'Nuros.jpeg']:
+            if os.path.exists(name):
+                logo_path = name
+                break
+                
+        logo_cid = f"{uuid.uuid4()}@nuros"
+        logo_html = f'<img src="cid:{logo_cid}" alt="NUROS" style="max-height: 80px; margin-bottom: 10px;">' if logo_path else '<h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>'
+        
         html_report_content = f"""
         <html>
             <body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f7f6; padding: 20px; color: #0A2B4E; margin: 0;">
                 <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                     <div style="background-color: #0A2B4E; padding: 30px; text-align: center; border-bottom: 4px solid #D4AF37;">
-                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>
+                        {logo_html}
                         <p style="color: #54B948; margin: 5px 0 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">Voice of Health AI</p>
                     </div>
                     <div style="padding: 40px 30px;">
@@ -56,6 +68,12 @@ def send_encrypted_report(patient_email, pdf_data, pdf_filename):
         </html>
         """
         msg.add_alternative(html_report_content, subtype='html')
+        
+        if logo_path:
+            with open(logo_path, 'rb') as img:
+                img_data = img.read()
+            maintype, subtype = mimetypes.guess_type(logo_path)[0].split('/')
+            msg.get_payload()[1].add_related(img_data, maintype=maintype, subtype=subtype, cid=f"<{logo_cid}>")
         
         msg.add_attachment(pdf_data, maintype='application', subtype='pdf', filename=pdf_filename)
         
@@ -93,12 +111,21 @@ def send_access_key_email(patient_email, access_key):
             "Keep this key secure. Do not share it with unauthorized individuals."
         )
         
+        logo_path = None
+        for name in ['Nuros.png', 'nuros.png', 'logo.png', 'Nuros.jpg', 'nuros.jpg', 'logo.jpg', 'Nuros.jpeg']:
+            if os.path.exists(name):
+                logo_path = name
+                break
+                
+        logo_cid = f"{uuid.uuid4()}@nuros"
+        logo_html = f'<img src="cid:{logo_cid}" alt="NUROS" style="max-height: 80px; margin-bottom: 10px;">' if logo_path else '<h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>'
+        
         html_key_content = f"""
         <html>
             <body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f7f6; padding: 20px; color: #0A2B4E; margin: 0;">
                 <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                     <div style="background-color: #0A2B4E; padding: 30px; text-align: center; border-bottom: 4px solid #54B948;">
-                        <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 2px;">NUROS</h1>
+                        {logo_html}
                         <p style="color: #D4AF37; margin: 5px 0 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">Security & Privacy</p>
                     </div>
                     <div style="padding: 40px 30px; text-align: center;">
@@ -122,6 +149,12 @@ def send_access_key_email(patient_email, access_key):
         """
         msg.add_alternative(html_key_content, subtype='html')
         
+        if logo_path:
+            with open(logo_path, 'rb') as img:
+                img_data = img.read()
+            maintype, subtype = mimetypes.guess_type(logo_path)[0].split('/')
+            msg.get_payload()[1].add_related(img_data, maintype=maintype, subtype=subtype, cid=f"<{logo_cid}>")
+            
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(smtp_server, smtp_port, context=context) as smtp:
             smtp.login(smtp_user, smtp_pass)
