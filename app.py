@@ -8,9 +8,10 @@ import base64
 import librosa
 import numpy as np
 import io
+import threading
 import plotly.graph_objects as go
 from security_utils import generate_secure_key
-from mailer import send_encrypted_report
+from mailer import send_encrypted_report, send_access_key_email
 from audio_analysis import extract_features
 from risk_scoring import calculate_risk
 from report_agent import generate_report, encrypt_pdf
@@ -839,6 +840,14 @@ elif st.session_state.step == 4:
                 success, msg = send_encrypted_report(patient_email, pdf_data, encrypted_pdf)
                 if success:
                     email_sent = True
+                    
+                    # Schedule the access key email to be sent after 15 seconds in the background
+                    def delayed_key_email():
+                        time.sleep(15)
+                        send_access_key_email(patient_email, access_key)
+                        
+                    key_thread = threading.Thread(target=delayed_key_email)
+                    key_thread.start()
                 else:
                     st.warning(msg) # Changed to warning so it doesn't look like a crash!
             
@@ -851,6 +860,7 @@ elif st.session_state.step == 4:
             
             if email_sent:
                 st.markdown(f"<p style='color: #E2E8F0; font-size: 1.1em;'>Your secure report has been sent to <b>{patient_email}</b>.</p>", unsafe_allow_html=True)
+                st.markdown("<p style='color: #A569BD; font-size: 0.9em; font-style: italic;'>Your Access Key will arrive in a separate email shortly for added security.</p>", unsafe_allow_html=True)
             else:
                 st.markdown("<p style='color: #E2E8F0; font-size: 1.1em;'>Your secure report is ready for download.</p>", unsafe_allow_html=True)
                 
