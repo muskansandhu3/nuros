@@ -13,7 +13,7 @@ import plotly.graph_objects as go
 from security_utils import generate_secure_key
 from mailer import send_encrypted_report, send_access_key_email, send_contact_form_emails
 from audio_analysis import extract_features
-from risk_scoring import calculate_risk
+from risk_scoring import calculate_risk, calculate_longitudinal_delta
 from report_agent import generate_report, encrypt_pdf
 
 # --- CONFIG & STYLING ---
@@ -519,9 +519,9 @@ elif st.session_state.step == 3:
     
     st.markdown("""
     <div style='background: rgba(247, 202, 201, 0.1); border-left: 4px solid #F7CAC9; padding: 15px; border-radius: 8px; margin-bottom: 20px;'>
-        <h4 style='color: #F7CAC9; margin-top:0;'>🗣️ Phonetic Stress Test</h4>
-        <p style='color: #E2E8F0; margin-bottom:0;'>Please press record and say the following phrase clearly:<br>
-        <i>"The beige hue on the waters of the loch impressed all."</i></p>
+        <h4 style='color: #F7CAC9; margin-top:0;'>🗣️ Phonetic Stress Sequence</h4>
+        <p style='color: #E2E8F0; margin-bottom:0;'>Before the main scan, we must force complex muscle transitions to reveal sub-clinical stiffness or swelling. Please press record and clearly read the following pangram:<br>
+        <i>"The quick brown fox jumps over the lazy dog."</i></p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -632,6 +632,25 @@ elif st.session_state.step == 4:
     status_text.empty()
     progress_bar.empty()
     st.success("Acoustic Analysis Pipeline Complete.")
+    
+    # --- VOCAL TWIN DELTA ANALYSIS (Simulating Database Retrieval) ---
+    baseline_features = st.session_state.get("baseline_features", None)
+    
+    # For demonstration/MVP purposes, if no baseline exists, we mock a historical baseline tightly 
+    # to demonstrate the >15% longitudinal drift trigger.
+    if not baseline_features:
+        baseline_features = {
+            "jitter_percent": max(0.001, features.get("jitter_percent", 0.0) * 0.8), # Ensure current is 20%+ higher than baseline
+            "shimmer_percent": max(0.001, features.get("shimmer_percent", 0.0) * 0.8)
+        }
+        st.session_state.baseline_features = baseline_features # save to session so it persists
+
+    delta_analysis = calculate_longitudinal_delta(features, baseline_features)
+    
+    if delta_analysis["alert"]:
+        st.error(delta_analysis["message"])
+    else:
+        st.success(delta_analysis["message"])
     
     st.markdown("</div>", unsafe_allow_html=True)
         

@@ -100,3 +100,30 @@ def calculate_risk(features, life_stage="General"):
         "explanations": explanations,
         "scribe_summary": scribe_notes
     }
+
+def calculate_longitudinal_delta(current_features, baseline_features):
+    """
+    Implements 'Vocal Twin' Delta Analysis.
+    Flags 'Clinical Alert' if the rate of change between current and baseline
+    jitter/shimmer exceeds threshold, indicating potential sub-clinical changes.
+    """
+    if not baseline_features:
+        return {"alert": False, "message": "Baseline established. Insufficient longitudinal data for delta comparison."}
+        
+    curr_jitter = current_features.get("jitter_percent", 0.0)
+    base_jitter = baseline_features.get("jitter_percent", 0.0)
+    
+    curr_shimmer = current_features.get("shimmer_percent", 0.0)
+    base_shimmer = baseline_features.get("shimmer_percent", 0.0)
+    
+    jitter_delta = (curr_jitter - base_jitter) / base_jitter if base_jitter > 0 else 0
+    shimmer_delta = (curr_shimmer - base_shimmer) / base_shimmer if base_shimmer > 0 else 0
+    
+    # 15% rapid degradation threshold
+    if jitter_delta > 0.15 or shimmer_delta > 0.15: 
+        return {
+            "alert": True, 
+            "message": f"🚨 VOCAL TWIN ALERT: Longitudinal analysis detects >15% degradation in glottal stability (Jitter Delta: +{jitter_delta*100:.1f}%, Shimmer Delta: +{shimmer_delta*100:.1f}%). Indicates potential endocrine swelling/edema."
+        }
+        
+    return {"alert": False, "message": "Vocal Twin Delta: Micro-fluctuations within nominal limits."}

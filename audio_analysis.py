@@ -11,8 +11,8 @@ def extract_features(audio_path):
     Extract vocal biomarkers from 10 seconds of audio.
     Includes 'Language Shield' low-pass filtering to isolate glottal physics.
     """
-    # Load audio with Librosa
-    y, sr = librosa.load(audio_path, duration=10)
+    # Load audio with Librosa at high resolution for micro-instabilities
+    y, sr = librosa.load(audio_path, sr=48000, duration=20)
     
     # ---------------------------------------------------------
     # LANGUAGE SHIELD: Low-Pass Filter (Isolate Glottal Pulse)
@@ -44,16 +44,19 @@ def extract_features(audio_path):
     pitch_values = pitch_values[pitch_values != 0] # remove unvoiced
     f0_std = np.std(pitch_values) if len(pitch_values) > 0 else 0
 
-    # Extract Jitter and Shimmer
-    pointProcess = call(snd, "To PointProcess (periodic, cc)", 75, 500)
+    # Extract Jitter and Shimmer with HIGHER SENSITIVITY for micro-fluctuations (Edema/Stiffness)
+    # Using broader frequency captures and more sensitive period bounds
+    pointProcess = call(snd, "To PointProcess (periodic, cc)", 60, 600)
     
     try:
-        jitter = call(pointProcess, "Get jitter (local)", 0.0001, 0.02, 1.3) * 100 # percentage
+        # Tighter shortest period to catch micro-instabilities
+        jitter = call(pointProcess, "Get jitter (local)", 0.00005, 0.02, 1.3) * 100 # percentage
     except:
         jitter = 0.0
 
     try:
-        shimmer = call([snd, pointProcess], "Get shimmer (local)", 0.0001, 0.02, 1.3, 1.6) * 100 # percentage
+        # Shimmer sensitivity increased for subtle amplitude perturbation
+        shimmer = call([snd, pointProcess], "Get shimmer (local)", 0.00005, 0.02, 1.3, 1.6) * 100 # percentage
     except:
         shimmer = 0.0
 
