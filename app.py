@@ -952,11 +952,23 @@ elif st.session_state.step == 4:
         color: #FFF !important;
     }
     div[data-testid="stDialog"] div[data-baseweb="textarea"] > div,
+    div[data-testid="stDialog"] div[data-baseweb="input"] > div {
+        background-color: #F8FAFC !important;
+        border: 1px solid #D4AF37 !important; /* Gold border */
+        border-radius: 8px !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+    div[data-testid="stDialog"] div[data-baseweb="textarea"] > div:focus-within,
+    div[data-testid="stDialog"] div[data-baseweb="input"] > div:focus-within {
+        background-color: #FFFFFF !important;
+        border: 1.5px solid #54B948 !important; /* Green glow focus */
+        box-shadow: 0 0 10px rgba(84, 185, 72, 0.2) !important;
+    }
     div[data-testid="stDialog"] textarea,
     div[data-testid="stDialog"] input {
         background-color: transparent !important;
-        color: #0A192F !important;
-        border: 1px solid #CBD5E1 !important;
+        color: #0A2B4E !important; /* Navy */
     }
     
     /* Use standard CSS :has() combinator + adjacent sibling to selectively target this exact button purely via CSS */
