@@ -12,19 +12,26 @@ import qrcode
 
 class PDF(FPDF):
     def header(self):
+        # Look for the user's Nuros logo
+        logo_path = None
+        for name in ['Nuros.png', 'nuros.png', 'logo.png', 'Nuros.jpg', 'nuros.jpg', 'logo.jpg', 'Nuros.jpeg']:
+            if os.path.exists(name):
+                logo_path = name
+                break
+                
         # Clean header with Clinical Seal
-        if os.path.exists("logo.png"):
-            self.image("logo.png", 10, 8, 30)
+        if logo_path:
+            self.image(logo_path, 10, 8, 30)
         else:
             self.set_font('Helvetica', 'B', 16)
-            self.set_text_color(10, 25, 47)
+            self.set_text_color(10, 43, 78) # Navy Blue
             self.cell(40)
             self.cell(30, 10, 'NUROS | Clinical Voice AI', 0, 0, 'L')
         
         self.set_font('Helvetica', 'B', 10)
         self.set_text_color(100, 100, 100)
         self.cell(0, 10, 'DIAGNOSTIC SUMMARY REPORT', 0, 1, 'R')
-        self.set_draw_color(10, 25, 47)
+        self.set_draw_color(10, 43, 78) # Navy Blue
         self.set_line_width(0.5)
         self.line(10, 25, 200, 25)
         self.ln(10)
@@ -62,16 +69,16 @@ def generate_3d_graph(features, output_path="vocal_stability_graph.png"):
     
     fig = plt.figure(figsize=(4, 4))
     ax = fig.add_subplot(111, polar=True)
-    ax.plot(angles, stats, 'o-', linewidth=2, color="#F7CAC9")
-    ax.fill(angles, stats, alpha=0.25, color="#F7CAC9")
+    ax.plot(angles, stats, 'o-', linewidth=2, color="#54B948") # Green
+    ax.fill(angles, stats, alpha=0.25, color="#54B948") # Green
     ax.set_thetagrids(angles[:-1] * 180/np.pi, labels)
     
     # "3D" styling
     ax.grid(color='#E0E0E0', linestyle='--', linewidth=1)
-    ax.spines['polar'].set_color('#0A192F')
+    ax.spines['polar'].set_color('#0A2B4E') # Navy Blue
     ax.set_facecolor('#F8FAFC')
     
-    plt.title('Vocal Biomarker Axes', size=12, color='#0A192F', y=1.1)
+    plt.title('Vocal Biomarker Axes', size=12, color='#0A2B4E', y=1.1)
     plt.tight_layout()
     plt.savefig(output_path, dpi=150, transparent=True)
     plt.close()
@@ -86,8 +93,8 @@ def generate_sparkline(latest_score, output_path="sparkline.png"):
     trend = past_scores + [latest_score]
     
     fig, ax = plt.subplots(figsize=(4, 1))
-    ax.plot(trend, color='#0A192F', linewidth=2)
-    ax.fill_between(range(len(trend)), trend, alpha=0.3, color='#F7CAC9')
+    ax.plot(trend, color='#0A2B4E', linewidth=2) # Navy Blue
+    ax.fill_between(range(len(trend)), trend, alpha=0.3, color='#D4AF37') # Gold
     ax.axis('off')
     plt.tight_layout()
     plt.savefig(output_path, dpi=150, transparent=True)
@@ -98,7 +105,7 @@ def generate_qr_code(patient_id, output_path="qr_code.png"):
     qr = qrcode.QRCode(version=1, box_size=3, border=1)
     qr.add_data(f"NUROS_VERIFY:{patient_id}")
     qr.make(fit=True)
-    img = qr.make_image(fill_color="#0A192F", back_color="white")
+    img = qr.make_image(fill_color="#0A2B4E", back_color="white") # Navy Blue
     img.save(output_path)
     return output_path
 
@@ -150,7 +157,7 @@ def generate_report(patient_id, date, stability_score, risk_data, explanations, 
     pdf.set_font('Helvetica', 'B', 10)
     pdf.cell(30, 6, "Feature Hash:", 0, 0)
     pdf.set_font('Helvetica', 'I', 9)
-    pdf.set_text_color(247, 202, 201)
+    pdf.set_text_color(84, 185, 72) # Green
     pdf.cell(50, 6, features.get("vocal_twin_hash", "N/A"), 0, 1)
     
     pdf.ln(8)
@@ -165,7 +172,7 @@ def generate_report(patient_id, date, stability_score, risk_data, explanations, 
     
     pdf.set_xy(90, y_before_graphs + 10)
     pdf.set_font('Helvetica', 'B', 12)
-    pdf.set_text_color(10, 25, 47)
+    pdf.set_text_color(10, 43, 78) # Navy Blue
     pdf.cell(50, 6, "Longitudinal Stability Trend (6mo)", 0, 1)
     pdf.image(spark_path, x=90, y=pdf.get_y()+2, w=80)
     
@@ -174,7 +181,7 @@ def generate_report(patient_id, date, stability_score, risk_data, explanations, 
 
     # --- SCRIBE NARRATIVE ---
     pdf.set_font('Helvetica', 'B', 12)
-    pdf.set_text_color(10, 25, 47)
+    pdf.set_text_color(10, 43, 78) # Navy Blue
     pdf.cell(0, 8, "CLINICAL SCRIBE ASSESSMENT", 0, 1, 'L')
     pdf.set_line_width(0.3)
     pdf.line(10, pdf.get_y(), 200, pdf.get_y())
@@ -188,7 +195,7 @@ def generate_report(patient_id, date, stability_score, risk_data, explanations, 
 
     # --- CLINICAL RESULTS TABLE ---
     pdf.set_font('Helvetica', 'B', 12)
-    pdf.set_text_color(10, 25, 47)
+    pdf.set_text_color(10, 43, 78) # Navy Blue
     pdf.cell(0, 8, "MODALITY RISK MAPPING", 0, 1, 'L')
     pdf.set_line_width(0.3)
     pdf.line(10, pdf.get_y(), 200, pdf.get_y())
