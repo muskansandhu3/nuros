@@ -21,7 +21,7 @@ class PDF(FPDF):
                 
         # Clean header with Clinical Seal
         if logo_path:
-            self.image(logo_path, 10, 8, 30)
+            self.image(logo_path, 10, 8, 50)
         else:
             self.set_font('Helvetica', 'B', 16)
             self.set_text_color(10, 43, 78) # Navy Blue
