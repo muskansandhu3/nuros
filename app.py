@@ -1023,7 +1023,51 @@ elif st.session_state.step == 4:
     @st.dialog("📞 Contact Nuros", width="large")
     def contact_dialog():
         if st.session_state.get("contact_submitted"):
-            st.success("Thank you! Your message has been sent successfully.")
+            st.balloons()
+            st.markdown("""
+            <style>
+            @keyframes flyUpFade {
+                0% { opacity: 0; transform: translate(-50%, 50px) scale(0.8); }
+                15% { opacity: 1; transform: translate(-50%, 0px) scale(1.05); }
+                80% { opacity: 1; transform: translate(-50%, -20px) scale(1); }
+                100% { opacity: 0; transform: translate(-50%, -100px) scale(0.9); }
+            }
+            .flying-thank-you {
+                position: fixed;
+                top: 40%;
+                left: 50%;
+                z-index: 999999;
+                background: linear-gradient(135deg, rgba(10,43,78,0.95), rgba(10,25,47,0.98));
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid #D4AF37; /* Gold */
+                border-radius: 20px;
+                padding: 40px 60px;
+                text-align: center;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(212, 175, 55, 0.15);
+                animation: flyUpFade 6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+                pointer-events: none; /* User can click through it while it fades */
+            }
+            .flying-thank-you h2 {
+                color: #F8F9FA !important;
+                font-size: 2.5rem !important;
+                margin: 0 0 15px 0 !important;
+                text-shadow: 0 0 15px rgba(255,255,255,0.3);
+            }
+            .flying-thank-you p {
+                color: #54B948 !important; /* Green */
+                font-size: 1.1rem !important;
+                margin: 0 !important;
+                font-weight: 500 !important;
+                letter-spacing: 1px;
+            }
+            </style>
+            <div class="flying-thank-you">
+                <h2>✨ Thank You!</h2>
+                <p>We will get back to you within 48 hours.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.success("Your message has been securely transmitted to Nuros Clinical Innovation.")
         else:
             st.markdown("**Get in touch with our Clinical Innovation Team.**")
             with st.form("contact_form"):
