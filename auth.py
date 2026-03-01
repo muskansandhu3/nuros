@@ -36,8 +36,8 @@ def secure_login():
     st.markdown("Authenticate to access your cryptographically linked Vocal Health Twin.")
     
     with st.form("login_form"):
-        username = st.text_input("Verified Provider NPI or Patient ID")
-        password = st.text_input("Zero-Knowledge Password", type="password")
+        username = st.text_input("Verified Provider NPI or Patient ID", placeholder="Enter Provider NPI or Patient ID")
+        password = st.text_input("Password", type="password", placeholder="Enter Password")
         
         if st.form_submit_button("Initiate 2-Step Verification"):
             if username and password:
