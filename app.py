@@ -920,208 +920,208 @@ elif st.session_state.step == 4:
             
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # --- FLOATING MARKET VALIDATION FEEDBACK FORM ---
-    @st.dialog("✨ Nuros Market Validation", width="large")
-    def feedback_dialog():
-        if st.session_state.get("feedback_submitted"):
-            st.success("Thank you! Your feedback is being used as 'Market Validation Data'.")
-        else:
-            st.markdown("**Help us refine the future of clinical vocal biomarkers and close the gap in Women's Health.**")
-            with st.form("feedback_form"):
-                q1 = st.radio("1. Would sharing this automated report with your doctor save you time during appointments?", ["Yes", "No"])
-                q2 = st.slider("2. On a scale of 1-5, how secure did you feel using this 'Password-Protected' delivery system?", 1, 5, 5)
-                q3 = st.radio("3. Did you feel the 'Language Shield' accurately captured your voice despite your accent or primary language?", ["Yes", "No"])
-                q4 = st.slider("4. How valuable is having a dedicated 'Hormonal & Thyroid' vocal scanner to you?", 1, 10, 10)
-                q5 = st.text_area("5. Please provide one sentence on how Nuros could help you 'Age in Place' or manage your health at home.")
-                
-                submitted = st.form_submit_button("Submit Validation")
-                if submitted:
-                    import csv
-                    import os
-                    file_exists = os.path.isfile("validation_results.csv")
-                    try:
-                        with open("validation_results.csv", "a", newline="", encoding="utf-8") as f:
-                            writer = csv.writer(f)
-                            if not file_exists:
-                                writer.writerow(["Timestamp", "Admin Burden (Save Time)", "Trust (Security 1-5)", "Inclusion (Language Shield)", "Women's Health Value (1-10)", "Age in Place Testimonial"])
-                            writer.writerow([
-                                datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                                q1, q2, q3, q4, q5
-                            ])
-                    except Exception as e:
-                        print("Failed to write to validation_results.csv:", e)
+# --- FLOATING MARKET VALIDATION FEEDBACK FORM ---
+@st.dialog("✨ Nuros Market Validation", width="large")
+def feedback_dialog():
+    if st.session_state.get("feedback_submitted"):
+        st.success("Thank you! Your feedback is being used as 'Market Validation Data'.")
+    else:
+        st.markdown("**Help us refine the future of clinical vocal biomarkers and close the gap in Women's Health.**")
+        with st.form("feedback_form"):
+            q1 = st.radio("1. Would sharing this automated report with your doctor save you time during appointments?", ["Yes", "No"])
+            q2 = st.slider("2. On a scale of 1-5, how secure did you feel using this 'Password-Protected' delivery system?", 1, 5, 5)
+            q3 = st.radio("3. Did you feel the 'Language Shield' accurately captured your voice despite your accent or primary language?", ["Yes", "No"])
+            q4 = st.slider("4. How valuable is having a dedicated 'Hormonal & Thyroid' vocal scanner to you?", 1, 10, 10)
+            q5 = st.text_area("5. Please provide one sentence on how Nuros could help you 'Age in Place' or manage your health at home.")
+            
+            submitted = st.form_submit_button("Submit Validation")
+            if submitted:
+                import csv
+                import os
+                file_exists = os.path.isfile("validation_results.csv")
+                try:
+                    with open("validation_results.csv", "a", newline="", encoding="utf-8") as f:
+                        writer = csv.writer(f)
+                        if not file_exists:
+                            writer.writerow(["Timestamp", "Admin Burden (Save Time)", "Trust (Security 1-5)", "Inclusion (Language Shield)", "Women's Health Value (1-10)", "Age in Place Testimonial"])
+                        writer.writerow([
+                            datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            q1, q2, q3, q4, q5
+                        ])
+                except Exception as e:
+                    print("Failed to write to validation_results.csv:", e)
 
-                    st.session_state.feedback_submitted = True
-                    st.success("Thank you! Your feedback is being used as 'Market Validation Data'.")
+                st.session_state.feedback_submitted = True
+                st.success("Thank you! Your feedback is being used as 'Market Validation Data'.")
 
-    st.markdown('''
-    <style>
-    /* Fix Dialog Form Text Legibility */
-    div[data-testid="stDialog"] * {
-        color: #0A192F !important; /* Deep Navy Font */
-    }
-    div[data-testid="stDialog"] div.stButton > button {
-        background-color: #0A192F !important;
-        color: #F8F9FA !important;
-        border: 1px solid #0A192F !important;
-        box-shadow: none !important;
-    }
-    div[data-testid="stDialog"] div.stButton > button:hover {
-        background-color: #16213E !important;
-        color: #FFF !important;
-    }
-    div[data-testid="stDialog"] div[data-baseweb="textarea"] > div,
-    div[data-testid="stDialog"] div[data-baseweb="input"] > div {
-        background-color: #F8FAFC !important;
-        border: 1px solid #D4AF37 !important; /* Gold border */
-        border-radius: 8px !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
-        transition: all 0.2s ease-in-out !important;
-    }
-    div[data-testid="stDialog"] div[data-baseweb="textarea"] > div:focus-within,
-    div[data-testid="stDialog"] div[data-baseweb="input"] > div:focus-within {
-        background-color: #FFFFFF !important;
-        border: 1.5px solid #54B948 !important; /* Green glow focus */
-        box-shadow: 0 0 10px rgba(84, 185, 72, 0.2) !important;
-    }
-    div[data-testid="stDialog"] textarea,
-    div[data-testid="stDialog"] input {
-        background-color: transparent !important;
-        color: #0A2B4E !important; /* Navy */
-    }
-    
-    /* Use standard CSS :has() combinator + adjacent sibling to selectively target this exact button purely via CSS */
-    .element-container:has(.feedback-anchor) + .element-container {
-        position: fixed !important;
-        bottom: 2rem !important;
-        right: 2rem !important;
-        z-index: 9999 !important;
-    }
-    .element-container:has(.feedback-anchor) + .element-container button {
-        background: rgba(10, 25, 47, 0.7) !important; /* Deep navy base */
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border: 1px solid rgba(247, 202, 201, 0.3) !important; /* Rose quartz border */
-        box-shadow: 0 4px 15px rgba(247, 202, 201, 0.1) !important;
-        border-radius: 50px !important;
-        color: #F8F9FA !important;
-        padding: 0.8rem 1.5rem !important;
-        font-weight: 600 !important;
-        transition: all 0.3s ease !important;
-    }
-    .element-container:has(.feedback-anchor) + .element-container button:hover {
-        background: rgba(247, 202, 201, 0.15) !important; /* Rose quartz glow */
-        border: 1px solid rgba(247, 202, 201, 0.8) !important;
-        box-shadow: 0 0 25px rgba(247, 202, 201, 0.6) !important;
-        transform: translateY(-3px) !important;
-        color: #FFF !important;
-    }
-    
-    /* Contact Us Bubble Styling */
-    .element-container:has(.contact-anchor) + .element-container {
-        position: fixed !important;
-        bottom: 2rem !important;
-        left: 2rem !important;
-        z-index: 9999 !important;
-    }
-    .element-container:has(.contact-anchor) + .element-container button {
-        background: rgba(10, 43, 78, 0.8) !important; /* Deep Navy */
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border: 1px solid rgba(84, 185, 72, 0.4) !important; /* Green pop */
-        box-shadow: 0 4px 15px rgba(0,0,0, 0.2) !important;
-        border-radius: 50px !important;
-        color: #F8F9FA !important;
-        padding: 0.8rem 1.5rem !important;
-        font-weight: 600 !important;
-        transition: all 0.3s ease !important;
-    }
-    .element-container:has(.contact-anchor) + .element-container button:hover {
-        background: rgba(84, 185, 72, 0.2) !important; 
-        border: 1px solid rgba(84, 185, 72, 0.8) !important;
-        box-shadow: 0 0 20px rgba(84, 185, 72, 0.4) !important;
-        transform: translateY(-3px) !important;
-        color: #FFF !important;
-    }
-    </style>
-    <div class="feedback-anchor"></div>
-    ''', unsafe_allow_html=True)
-    
-    if st.button("✨ Help Close the Gap in Women's Health"):
-        feedback_dialog()
+st.markdown('''
+<style>
+/* Fix Dialog Form Text Legibility */
+div[data-testid="stDialog"] * {
+    color: #0A192F !important; /* Deep Navy Font */
+}
+div[data-testid="stDialog"] div.stButton > button {
+    background-color: #0A192F !important;
+    color: #F8F9FA !important;
+    border: 1px solid #0A192F !important;
+    box-shadow: none !important;
+}
+div[data-testid="stDialog"] div.stButton > button:hover {
+    background-color: #16213E !important;
+    color: #FFF !important;
+}
+div[data-testid="stDialog"] div[data-baseweb="textarea"] > div,
+div[data-testid="stDialog"] div[data-baseweb="input"] > div {
+    background-color: #F8FAFC !important;
+    border: 1px solid #D4AF37 !important; /* Gold border */
+    border-radius: 8px !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02) !important;
+    transition: all 0.2s ease-in-out !important;
+}
+div[data-testid="stDialog"] div[data-baseweb="textarea"] > div:focus-within,
+div[data-testid="stDialog"] div[data-baseweb="input"] > div:focus-within {
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #54B948 !important; /* Green glow focus */
+    box-shadow: 0 0 10px rgba(84, 185, 72, 0.2) !important;
+}
+div[data-testid="stDialog"] textarea,
+div[data-testid="stDialog"] input {
+    background-color: transparent !important;
+    color: #0A2B4E !important; /* Navy */
+}
 
-    # --- CONTACT US DIALOG ---
-    @st.dialog("📞 Contact Nuros", width="large")
-    def contact_dialog():
-        if st.session_state.get("contact_submitted"):
-            st.balloons()
-            st.markdown("""
-            <style>
-            @keyframes flyUpFade {
-                0% { opacity: 0; transform: translate(-50%, 50px) scale(0.8); }
-                15% { opacity: 1; transform: translate(-50%, 0px) scale(1.05); }
-                80% { opacity: 1; transform: translate(-50%, -20px) scale(1); }
-                100% { opacity: 0; transform: translate(-50%, -100px) scale(0.9); }
-            }
-            .flying-thank-you {
-                position: fixed;
-                top: 40%;
-                left: 50%;
-                z-index: 999999;
-                background: linear-gradient(135deg, rgba(10,43,78,0.95), rgba(10,25,47,0.98));
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                border: 1px solid #D4AF37; /* Gold */
-                border-radius: 20px;
-                padding: 40px 60px;
-                text-align: center;
-                box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(212, 175, 55, 0.15);
-                animation: flyUpFade 6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-                pointer-events: none; /* User can click through it while it fades */
-            }
-            .flying-thank-you h2 {
-                color: #F8F9FA !important;
-                font-size: 2.5rem !important;
-                margin: 0 0 15px 0 !important;
-                text-shadow: 0 0 15px rgba(255,255,255,0.3);
-            }
-            .flying-thank-you p {
-                color: #54B948 !important; /* Green */
-                font-size: 1.1rem !important;
-                margin: 0 !important;
-                font-weight: 500 !important;
-                letter-spacing: 1px;
-            }
-            </style>
-            <div class="flying-thank-you">
-                <h2>✨ Thank You!</h2>
-                <p>We will get back to you within 48 hours.</p>
-            </div>
-            """, unsafe_allow_html=True)
-            st.success("Your message has been securely transmitted to Nuros Clinical Innovation.")
-        else:
-            st.markdown("**Get in touch with our Clinical Innovation Team.**")
-            with st.form("contact_form"):
-                contact_name = st.text_input("Full Name")
-                contact_phone = st.text_input("Phone Number")
-                contact_email = st.text_input("Email Address")
-                contact_msg = st.text_area("Message")
-                
-                submitted_contact = st.form_submit_button("Send Message")
-                if submitted_contact:
-                    if contact_name and contact_email and contact_msg:
-                        with st.spinner("Sending message..."):
-                            success, result_msg = send_contact_form_emails(
-                                contact_name, contact_phone, contact_email, contact_msg
-                            )
-                            if success:
-                                st.session_state.contact_submitted = True
-                                st.rerun()
-                            else:
-                                st.error(result_msg)
-                    else:
-                        st.warning("Please fill in Name, Email, and Message.")
+/* Use standard CSS :has() combinator + adjacent sibling to selectively target this exact button purely via CSS */
+.element-container:has(.feedback-anchor) + .element-container {
+    position: fixed !important;
+    bottom: 2rem !important;
+    right: 2rem !important;
+    z-index: 9999 !important;
+}
+.element-container:has(.feedback-anchor) + .element-container button {
+    background: rgba(10, 25, 47, 0.7) !important; /* Deep navy base */
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(247, 202, 201, 0.3) !important; /* Rose quartz border */
+    box-shadow: 0 4px 15px rgba(247, 202, 201, 0.1) !important;
+    border-radius: 50px !important;
+    color: #F8F9FA !important;
+    padding: 0.8rem 1.5rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+.element-container:has(.feedback-anchor) + .element-container button:hover {
+    background: rgba(247, 202, 201, 0.15) !important; /* Rose quartz glow */
+    border: 1px solid rgba(247, 202, 201, 0.8) !important;
+    box-shadow: 0 0 25px rgba(247, 202, 201, 0.6) !important;
+    transform: translateY(-3px) !important;
+    color: #FFF !important;
+}
 
-    st.markdown('<div class="contact-anchor"></div>', unsafe_allow_html=True)
-    if st.button("💬 Contact Us"):
-        contact_dialog()
+/* Contact Us Bubble Styling */
+.element-container:has(.contact-anchor) + .element-container {
+    position: fixed !important;
+    bottom: 2rem !important;
+    left: 2rem !important;
+    z-index: 9999 !important;
+}
+.element-container:has(.contact-anchor) + .element-container button {
+    background: rgba(10, 43, 78, 0.8) !important; /* Deep Navy */
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(84, 185, 72, 0.4) !important; /* Green pop */
+    box-shadow: 0 4px 15px rgba(0,0,0, 0.2) !important;
+    border-radius: 50px !important;
+    color: #F8F9FA !important;
+    padding: 0.8rem 1.5rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+.element-container:has(.contact-anchor) + .element-container button:hover {
+    background: rgba(84, 185, 72, 0.2) !important; 
+    border: 1px solid rgba(84, 185, 72, 0.8) !important;
+    box-shadow: 0 0 20px rgba(84, 185, 72, 0.4) !important;
+    transform: translateY(-3px) !important;
+    color: #FFF !important;
+}
+</style>
+<div class="feedback-anchor"></div>
+''', unsafe_allow_html=True)
+
+if st.button("✨ Help Close the Gap in Women's Health"):
+    feedback_dialog()
+
+# --- CONTACT US DIALOG ---
+@st.dialog("📞 Contact Nuros", width="large")
+def contact_dialog():
+    if st.session_state.get("contact_submitted"):
+        st.balloons()
+        st.markdown("""
+        <style>
+        @keyframes flyUpFade {
+            0% { opacity: 0; transform: translate(-50%, 50px) scale(0.8); }
+            15% { opacity: 1; transform: translate(-50%, 0px) scale(1.05); }
+            80% { opacity: 1; transform: translate(-50%, -20px) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -100px) scale(0.9); }
+        }
+        .flying-thank-you {
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            z-index: 999999;
+            background: linear-gradient(135deg, rgba(10,43,78,0.95), rgba(10,25,47,0.98));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid #D4AF37; /* Gold */
+            border-radius: 20px;
+            padding: 40px 60px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(212, 175, 55, 0.15);
+            animation: flyUpFade 6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            pointer-events: none; /* User can click through it while it fades */
+        }
+        .flying-thank-you h2 {
+            color: #F8F9FA !important;
+            font-size: 2.5rem !important;
+            margin: 0 0 15px 0 !important;
+            text-shadow: 0 0 15px rgba(255,255,255,0.3);
+        }
+        .flying-thank-you p {
+            color: #54B948 !important; /* Green */
+            font-size: 1.1rem !important;
+            margin: 0 !important;
+            font-weight: 500 !important;
+            letter-spacing: 1px;
+        }
+        </style>
+        <div class="flying-thank-you">
+            <h2>✨ Thank You!</h2>
+            <p>We will get back to you within 48 hours.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        st.success("Your message has been securely transmitted to Nuros Clinical Innovation.")
+    else:
+        st.markdown("**Get in touch with our Clinical Innovation Team.**")
+        with st.form("contact_form"):
+            contact_name = st.text_input("Full Name")
+            contact_phone = st.text_input("Phone Number")
+            contact_email = st.text_input("Email Address")
+            contact_msg = st.text_area("Message")
+            
+            submitted_contact = st.form_submit_button("Send Message")
+            if submitted_contact:
+                if contact_name and contact_email and contact_msg:
+                    with st.spinner("Sending message..."):
+                        success, result_msg = send_contact_form_emails(
+                            contact_name, contact_phone, contact_email, contact_msg
+                        )
+                        if success:
+                            st.session_state.contact_submitted = True
+                            st.rerun()
+                        else:
+                            st.error(result_msg)
+                else:
+                    st.warning("Please fill in Name, Email, and Message.")
+
+st.markdown('<div class="contact-anchor"></div>', unsafe_allow_html=True)
+if st.button("💬 Contact Us"):
+    contact_dialog()
