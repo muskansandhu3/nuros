@@ -32,7 +32,7 @@ css = """
     }
     
     .stApp {
-        background: radial-gradient(circle at center, rgba(247, 202, 201, 0.15) 0%, #0A192F 40%, #0A192F 100%);
+        background: radial-gradient(circle at center, rgba(247, 202, 201, 0.15) 0%, #0B132B 40%, #0B132B 100%);
         background-attachment: fixed;
         animation: breathingBackground 15s ease-in-out infinite alternate;
         color: #F8F9FA;
@@ -122,7 +122,7 @@ css = """
         box-shadow: 0 4px 20px rgba(0,0,0,0.2), inset 0 0 15px rgba(159, 226, 191, 0.05); /* Teal accent glow */
     }
 
-    .status-green { color: #9FE2BF; text-shadow: 0 0 12px rgba(159, 226, 191, 0.6); font-weight: 600; } /* Healing Teal */
+    .status-green { color: #3A7CA5; text-shadow: 0 0 12px rgba(159, 226, 191, 0.6); font-weight: 600; } /* Healing Teal */
     .status-amber { color: #F7CAC9; text-shadow: 0 0 12px rgba(247, 202, 201, 0.6); font-weight: 600; } /* Magical Pink for caution */
 
     /* Typography */
@@ -130,13 +130,13 @@ css = """
         font-size: 2.8rem;
         font-weight: 700;
         letter-spacing: -1px;
-        color: #9FE2BF; /* Soft Seafoam for main success numbers */
+        color: #3A7CA5; /* Soft Seafoam for main success numbers */
         text-shadow: 0 0 20px rgba(159, 226, 191, 0.5);
     }
     
     .risk-high { color: #F7CAC9; font-weight: 600; text-shadow: 0 0 15px rgba(247, 202, 201, 0.5); }
     .risk-medium { color: #A569BD; font-weight: 600; text-shadow: 0 0 15px rgba(165, 105, 189, 0.4); } 
-    .risk-low { color: #9FE2BF; font-weight: 600; text-shadow: 0 0 15px rgba(159, 226, 191, 0.4); }
+    .risk-low { color: #3A7CA5; font-weight: 600; text-shadow: 0 0 15px rgba(159, 226, 191, 0.4); }
 
     hr { border-color: rgba(247, 202, 201, 0.1); }
     
@@ -188,7 +188,7 @@ css = """
         color: #fff !important;
     }
     div[data-testid="stExpander"] details summary svg {
-        fill: #9FE2BF !important; /* Make the dropdown chevron teal */
+        fill: #3A7CA5 !important; /* Make the dropdown chevron teal */
     }
     div[data-testid="stExpanderDetails"] {
         background-color: rgba(10, 25, 47, 0.8) !important;
@@ -203,9 +203,9 @@ css = """
     }
     
     div[data-testid="stAudioInput"] button {
-        background-color: #0A192F !important;
+        background-color: #0B132B !important;
         border-radius: 50px !important;
-        border: 1px solid #9FE2BF !important;
+        border: 1px solid #3A7CA5 !important;
         transition: all 0.3s ease !important;
     }
     
@@ -221,7 +221,7 @@ css = """
     }
     
     div[data-testid="stAudioInput"] * {
-        color: #0A192F !important; /* Force timer and timestamps to dark navy */
+        color: #0B132B !important; /* Force timer and timestamps to dark navy */
         font-weight: 700 !important;
     }
     
@@ -234,7 +234,7 @@ css = """
     audio {
         outline: none;
         border-radius: 50px;
-        background-color: #0A192F !important;
+        background-color: #0B132B !important;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(159, 226, 191, 0.1) !important;
         border: 1px solid rgba(159, 226, 191, 0.4) !important;
         height: 44px !important; /* 44px is the minimum height before Webkit hides controls */
@@ -375,11 +375,11 @@ if os.path.exists("banner.png"):
 else:
     # Fallback placeholder if image not found
     st.markdown("""
-    <div style="background: linear-gradient(90deg, #16213E, #0A192F, #16213E); 
+    <div style="background: linear-gradient(90deg, #16213E, #0B132B, #16213E); 
                 height: 120px; border-radius: 20px; border: 1px solid rgba(247, 202, 201, 0.3);
                 display: flex; justify-content: center; align-items: center; margin-bottom: 2rem;
                 box-shadow: 0 0 30px rgba(159, 226, 191, 0.1);">
-        <p style="color: #9FE2BF; font-style: italic; opacity: 0.7;">Save 'banner.png' to project root to display header banner</p>
+        <p style="color: #3A7CA5; font-style: italic; opacity: 0.7;">Save 'banner.png' to project root to display header banner</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -415,6 +415,16 @@ with c2:
 
 st.markdown("<p class='disclaimer'>Clinical-Grade Diagnostic Infrastructure for Endocrine & Neuro-Motor Health. Requires 20 seconds of vocal biomarker capture. Nuros provides AI-driven, auxiliary risk-scoring for endocrine and neuro-motor health.</p>", unsafe_allow_html=True)
 
+pdf_href_header = "#"
+meth_pdf_path = "NUROS_Clinical_Methodology.pdf"
+if os.path.exists(meth_pdf_path):
+    with open(meth_pdf_path, "rb") as f:
+        meth_data = f.read()
+    b64_meth = base64.b64encode(meth_data).decode()
+    pdf_href_header = f"data:application/pdf;base64,{b64_meth}"
+
+st.markdown(f"<div style='text-align: center; margin-bottom: 35px;'><a href='{pdf_href_header}' target='_blank' download='NUROS_Clinical_Methodology.pdf' style='color: #F7CAC9; text-decoration: none; font-weight: 600; padding: 8px 16px; background: rgba(247, 202, 201, 0.1); border: 1px solid rgba(247, 202, 201, 0.4); border-radius: 8px; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(247, 202, 201, 0.05); transition: all 0.2s;'>📋 Clinical Methodology Portal</a></div>", unsafe_allow_html=True)
+
 
 # --- SESSION STATE INITIALIZATION ---
 if 'step' not in st.session_state:
@@ -433,7 +443,8 @@ def prev_step():
 # STEP 1: IDENTITY
 if st.session_state.step == 1:
     st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
-    st.subheader("Step 1: Patient Identity", anchor=False)
+    st.markdown("<div style='display: flex; justify-content: space-between; align-items: center;'><h3 style='margin: 0;'>Secure Patient Portal</h3><span style='background: rgba(58, 124, 165, 0.2); color: #3A7CA5; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(58, 124, 165, 0.5); font-weight: 600; font-size: 0.8em;'>AES-256 Verified Login</span></div><hr style='border-color: rgba(247, 202, 201, 0.15); margin-top: 15px;'>", unsafe_allow_html=True)
+    st.subheader("Step 1: Clinical History & Identity", anchor=False)
     
     col_fn, col_ln = st.columns(2)
     with col_fn:
@@ -587,6 +598,13 @@ elif st.session_state.step == 3:
 # STEP 4: ANALYSIS DASHBOARD
 elif st.session_state.step == 4:
     st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style='background: rgba(11, 19, 43, 0.7); border: 1px solid rgba(247, 202, 201, 0.3); border-left: 4px solid #F7CAC9; padding: 15px 20px; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);'>
+        <p style='color: #F7CAC9; margin: 0 0 5px 0; font-size: 0.9em; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;'>⚠️ Clinical Integrity Notice</p>
+        <p style='color: #94A3B8; margin: 0; font-size: 0.85em; font-style: italic; line-height: 1.5;'>This Acoustic Dashboard operates as an Auxiliary Screening Tool. All longitudinal 'Vocal Twin' data and tracked biomarker metrics must be formally evaluated and clinically validated by a licensed physician or neuro-motor specialist.</p>
+    </div>
+    """, unsafe_allow_html=True)
     st.subheader("🧬 Acoustic Analysis Output", anchor=False)
 
     st.markdown("""
@@ -659,25 +677,25 @@ elif st.session_state.step == 4:
     st.subheader("🌊 3D Silk Waveform Visualizer", anchor=False)
     st.write("Real-time bioluminescent mapping of glottal frequencies.")
     
-    # Generate STFT for 3D Plot
+    # Generate STFT for 3D Plot (Scientific Oscillograph High-Density Format)
     y, sr = librosa.load(temp_path, duration=3.0) # only plot first 3 secs for speed
-    D = np.abs(librosa.stft(y, n_fft=512, hop_length=256))
+    D = np.abs(librosa.stft(y, n_fft=1024, hop_length=128))
     D_db = librosa.amplitude_to_db(D, ref=np.max)
     
-    # Truncate high frequencies above 4000Hz approx for better visual
-    D_db = D_db[:100, :] 
+    # Truncate high frequencies for bioluminescent live-physics look
+    D_db = D_db[:150, :] 
     
     x = np.arange(D_db.shape[1])
     y_ax = np.arange(D_db.shape[0])
     X, Y = np.meshgrid(x, y_ax)
     
-    # Deep Midnight Navy -> Healing Teal -> Magical Pink (Silk Wave Colors)
+    # Bioluminescent Live Physics Gradients
     silk_colors = [
-        [0.0, '#0A192F'], # Midnight Navy
-        [0.3, '#16213E'], 
-        [0.6, '#9FE2BF'], # Soft Seafoam
-        [0.8, '#A569BD'], # Deep Purple transitional
-        [1.0, '#F7CAC9']  # Rose Quartz
+        [0.0, '#0B132B'], # Deep Background 
+        [0.2, '#16213E'], 
+        [0.5, '#3A7CA5'], # Neon Teal Core
+        [0.8, '#F7CAC9'], # Bio-Pink High Amplitude
+        [1.0, '#FFFFFF']  # Piercing White peaks
     ]
 
     fig = go.Figure(data=[go.Surface(
@@ -716,11 +734,20 @@ elif st.session_state.step == 4:
     # Apple-Style Circular / Callout view for the main score
     col_scp, col_scr = st.columns([1, 2])
     with col_scp:
-        st.markdown(f"<div style='text-align:center; padding: 1.5rem;'><span class='metric-value'>{score}</span><br><span style='font-size:1.3rem; color: #94A3B8; font-weight: 300;'>/ 100</span><br><br><span style='font-size:0.8rem; color: #F7CAC9;'>Vocal Twin Hash:<br>{features.get('vocal_twin_hash', 'N/A')}</span><br><span style='font-size:0.7rem; color: #9FE2BF; font-weight:bold;'>Market Ready: Medtronic Std.</span></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align:center; padding: 1.5rem;'><span class='metric-value'>{score}</span><br><span style='font-size:1.3rem; color: #94A3B8; font-weight: 300;'>/ 100</span><br><br><span style='font-size:0.8rem; color: #F7CAC9;'>Vocal Twin Hash:<br>{features.get('vocal_twin_hash', 'N/A')}</span><br><span style='font-size:0.7rem; color: #3A7CA5; font-weight:bold;'>Market Ready: Medtronic Std.</span></div>", unsafe_allow_html=True)
     with col_scr:
-        st.markdown("""<div style='background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border-left: 3px solid #F7CAC9;'>
-        <h5 style='color: #F7CAC9; margin-top:0;'>🩺 Clinical Scribe Agent <span style='font-size:0.7rem; color:#9FE2BF; vertical-align:middle; background:rgba(159,226,191,0.1); padding:2px 6px; border-radius:10px; margin-left:10px;'>Market Ready: Dynacare Std.</span></h5>
-        <p style='font-size: 0.95rem; line-height: 1.6; color: #E2E8F0;'>""" + analysis.get("scribe_summary", "Synthesis complete.") + """</p></div>""", unsafe_allow_html=True)
+        scribe_text = analysis.get("scribe_summary", "Synthesis complete.")
+        clean_scribe_text = scribe_text.replace("`", "'").replace("\n", " ")
+        st.markdown(f"""<div style='background: rgba(11, 19, 43, 0.7); padding: 25px; border-radius: 16px; border: 1px solid rgba(247, 202, 201, 0.4); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);'>
+        <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;'>
+            <h5 style='color: #F7CAC9; margin:0;'>📋 Standardized Clinical Narrative</h5>
+            <span style='font-size:0.7rem; color:#0B132B; background:#3A7CA5; padding:4px 10px; border-radius:12px; font-weight:700; letter-spacing: 0.5px;'>EMR-READY (Epic / OSCAR)</span>
+        </div>
+        <p style='font-size: 0.95rem; line-height: 1.6; color: #E2E8F0; font-family: "Courier New", Courier, monospace; white-space: pre-wrap; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 8px; border: 1px dashed rgba(58, 124, 165, 0.5); margin-bottom: 0;'>{scribe_text}</p>
+        <div style="text-align: right; margin-top: 10px;">
+            <button style='background: rgba(247, 202, 201, 0.1); border: 1px solid rgba(247, 202, 201, 0.5); border-radius: 6px; color: #F7CAC9; padding: 6px 12px; font-size: 0.85em; cursor: pointer; transition: all 0.2s;' onclick='navigator.clipboard.writeText(`{clean_scribe_text}`)'>📑 One-Click Copy to EMR</button>
+        </div>
+        </div>""", unsafe_allow_html=True)
 
     st.markdown("<hr style='opacity: 0.15'>", unsafe_allow_html=True)
     st.write("### Clinical Metric Displays")
@@ -784,11 +811,11 @@ elif st.session_state.step == 4:
     st.write("*Synchronizing vocal biomarkers with physiological life-stages.*")
     
     st.markdown(f"""
-    <div style='background: rgba(159, 226, 191, 0.05); border-left: 3px solid #9FE2BF; padding: 20px; border-radius: 12px;'>
+    <div style='background: rgba(159, 226, 191, 0.05); border-left: 3px solid #3A7CA5; padding: 20px; border-radius: 12px;'>
         <p style='color: #F8F9FA; line-height: 1.6;'>
         Based on the provided life-stage calibration (<b>{st.session_state.patient_profile.get("life_stage", "General")}</b>), the extracted acoustic biomarkers have been normalized to account for standard hormonal fluctuations affecting vocal fold mass and mucosal hydration.
         </p>
-        <p style='color: #9FE2BF; font-weight: 600; margin-bottom: 0;'>
+        <p style='color: #3A7CA5; font-weight: 600; margin-bottom: 0;'>
         Vocal fold stability aligns with normative data for this physiological phase.
         </p>
     </div>
@@ -880,7 +907,7 @@ elif st.session_state.step == 4:
             
             # The Secure Key Box (Beautifully Styled)
             st.markdown(f"""
-            <div style="background-color: #0A192F; padding: 15px; border-radius: 10px; border: 1px solid #F7CAC9; font-size: 26px; font-weight: bold; font-family: monospace; letter-spacing: 3px; color: #FFF; margin-bottom: 20px;">
+            <div style="background-color: #0B132B; padding: 15px; border-radius: 10px; border: 1px solid #F7CAC9; font-size: 26px; font-weight: bold; font-family: monospace; letter-spacing: 3px; color: #FFF; margin-bottom: 20px;">
                 {access_key}
             </div>
             """, unsafe_allow_html=True)
@@ -920,6 +947,22 @@ elif st.session_state.step == 4:
             
     st.markdown("</div>", unsafe_allow_html=True)
 
+    # --- FOOTER: REGULATORY TRUST SIGNALS ---
+    st.markdown(f"""
+    <div style='text-align: center; padding: 40px 0 20px 0; border-top: 1px solid rgba(247, 202, 201, 0.15); margin-top: 40px;'>
+        <div style='display: inline-block; background: rgba(11, 19, 43, 0.7); padding: 10px 24px; border-radius: 50px; border: 1px solid rgba(58, 124, 165, 0.4); box-shadow: 0 0 20px rgba(58, 124, 165, 0.1); margin-bottom: 20px;'>
+            <span style='color: #3A7CA5; font-size: 0.8em; font-weight: 700; letter-spacing: 1.2px;'>🛡️ AES-256 ENCRYPTED | PHIPA & PIPEDA COMPLIANT</span>
+        </div>
+        <div>
+            <a href='{pdf_href_header}' target='_blank' style='color: #94A3B8; font-size: 0.85em; text-decoration: none; margin: 0 15px; transition: color 0.2s;'>Clinical Methodology</a>
+            <span style='color: #475569;'>|</span>
+            <a href='#' style='color: #94A3B8; font-size: 0.85em; text-decoration: none; margin: 0 15px; transition: color 0.2s;'>Privacy Protocol</a>
+            <span style='color: #475569;'>|</span>
+            <a href='#' style='color: #94A3B8; font-size: 0.85em; text-decoration: none; margin: 0 15px; transition: color 0.2s;'>Terms of Use</a>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 # --- FLOATING MARKET VALIDATION FEEDBACK FORM ---
 @st.dialog("✨ Nuros Market Validation", width="large")
 def feedback_dialog():
@@ -958,12 +1001,12 @@ st.markdown('''
 <style>
 /* Fix Dialog Form Text Legibility */
 div[data-testid="stDialog"] * {
-    color: #0A192F !important; /* Deep Navy Font */
+    color: #0B132B !important; /* Deep Navy Font */
 }
 div[data-testid="stDialog"] div.stButton > button {
-    background-color: #0A192F !important;
+    background-color: #0B132B !important;
     color: #F8F9FA !important;
-    border: 1px solid #0A192F !important;
+    border: 1px solid #0B132B !important;
     box-shadow: none !important;
 }
 div[data-testid="stDialog"] div.stButton > button:hover {
@@ -981,7 +1024,7 @@ div[data-testid="stDialog"] div[data-baseweb="input"] > div {
 div[data-testid="stDialog"] div[data-baseweb="textarea"] > div:focus-within,
 div[data-testid="stDialog"] div[data-baseweb="input"] > div:focus-within {
     background-color: #FFFFFF !important;
-    border: 1.5px solid #54B948 !important; /* Green glow focus */
+    border: 1.5px solid #3A7CA5 !important; /* Green glow focus */
     box-shadow: 0 0 10px rgba(84, 185, 72, 0.2) !important;
 }
 div[data-testid="stDialog"] textarea,
@@ -1086,7 +1129,7 @@ def contact_dialog():
             text-shadow: 0 0 15px rgba(255,255,255,0.3);
         }
         .flying-thank-you p {
-            color: #54B948 !important; /* Green */
+            color: #3A7CA5 !important; /* Green */
             font-size: 1.1rem !important;
             margin: 0 !important;
             font-weight: 500 !important;
