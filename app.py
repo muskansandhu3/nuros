@@ -440,10 +440,28 @@ def prev_step():
 
 # --- MULTI-STEP ONBOARDING ---
 
+# --- CLINICIAN LOGIN DIALOG ---
+@st.dialog("🔐 Clinician / Patient Secure Access")
+def clinician_login_dialog():
+    st.markdown("Enter your provider credentials or Patient ID to access longitudinal records and the Vocal Twin tracking dashboard.")
+    st.text_input("NPI Number or Patient ID")
+    st.text_input("Access Key / Password", type="password")
+    if st.button("Authenticate", use_container_width=True):
+        st.session_state.step = 5
+        st.rerun()
+
 # STEP 1: IDENTITY
 if st.session_state.step == 1:
     st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
-    st.markdown("<div style='display: flex; justify-content: space-between; align-items: center;'><h3 style='margin: 0;'>Secure Patient Portal</h3><span style='background: rgba(58, 124, 165, 0.2); color: #3A7CA5; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(58, 124, 165, 0.5); font-weight: 600; font-size: 0.8em;'>AES-256 Verified Login</span></div><hr style='border-color: rgba(247, 202, 201, 0.15); margin-top: 15px;'>", unsafe_allow_html=True)
+    
+    col_hdr, col_btn = st.columns([3, 1.2])
+    with col_hdr:
+        st.markdown("<h3 style='margin: 0; padding-top: 8px;'>Secure Patient Portal</h3>", unsafe_allow_html=True)
+    with col_btn:
+        if st.button("🔐 Secure Login", use_container_width=True):
+            clinician_login_dialog()
+            
+    st.markdown("<hr style='border-color: rgba(247, 202, 201, 0.15); margin-top: 15px;'>", unsafe_allow_html=True)
     st.subheader("Step 1: Clinical History & Identity", anchor=False)
     
     col_fn, col_ln = st.columns(2)
@@ -962,6 +980,64 @@ elif st.session_state.step == 4:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+# STEP 5: LONGITUDINAL CLINICAL DASHBOARD
+elif st.session_state.step == 5:
+    st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
+    col_back, col_title = st.columns([1, 4])
+    with col_back:
+        if st.button("⬅ Log Out"):
+            st.session_state.step = 1
+            st.rerun()
+    with col_title:
+        st.subheader("🏥 Longitudinal Clinical History", anchor=False)
+        st.markdown("<p style='color: #94A3B8; margin-top: -10px;'>Vocal Health Twin Score Timeline</p>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style='background: rgba(11, 19, 43, 0.7); border: 1px solid rgba(58, 124, 165, 0.5); padding: 20px; border-radius: 12px; margin-bottom: 25px;'>
+        <h4 style='color: #3A7CA5; margin-top:0;'>Patient: Jane Doe (ID: PAT-A9B2C4)</h4>
+        <p style='color: #E2E8F0; margin-bottom:0;'><strong>Primary Risk Track:</strong> Endocrine / Thyroid Swelling</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Mock Timeline Data for Demonstration
+    timeline_data = {
+        "Date": ["Oct 12, 2025", "Nov 20, 2025", "Jan 05, 2026", "Feb 28, 2026"],
+        "Jitter (%)": [0.85, 0.90, 1.05, 1.25],
+        "Shimmer (%)": [2.50, 2.75, 3.20, 3.95],
+        "Score": [95, 95, 85, 75],
+        "Clinical Note": [
+            "Baseline Scan - Nominal",
+            "Nominal",
+            "Slight Tremor Detected",
+            "🚨 >15% Delta Alert: Pathological Rigidity"
+        ]
+    }
+    
+    import pandas as pd
+    import plotly.express as px
+    
+    df = pd.DataFrame(timeline_data)
+    
+    # Render Chart
+    fig = px.line(df, x="Date", y="Score", markers=True, title="Vocal Biomarker Stability Trend (0-100)")
+    fig.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font_color="#F8F9FA",
+        title_font_color="#F7CAC9",
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=True, gridcolor='rgba(247, 202, 201, 0.1)', range=[0, 100])
+    )
+    fig.update_traces(line_color="#3A7CA5", marker=dict(size=10, color="#F7CAC9", line=dict(width=2, color="#0B132B")))
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Detailed Record Table
+    st.markdown("### 📋 Emulated EMR Record")
+    st.dataframe(df, use_container_width=True, hide_index=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # --- FLOATING MARKET VALIDATION FEEDBACK FORM ---
 @st.dialog("✨ Nuros Market Validation", width="large")
