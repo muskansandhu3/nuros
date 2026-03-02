@@ -33,8 +33,8 @@ class PDF(FPDF):
         self.cell(0, 10, 'DIAGNOSTIC SUMMARY REPORT', 0, 1, 'R')
         self.set_draw_color(10, 43, 78) # Navy Blue
         self.set_line_width(0.5)
-        self.line(10, 25, 200, 25)
-        self.ln(10)
+        self.line(10, 36, 200, 36)
+        self.ln(20)
 
     def footer(self):
         self.set_y(-25)
