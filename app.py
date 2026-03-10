@@ -427,7 +427,7 @@ if os.path.exists(meth_pdf_path):
     b64_meth = base64.b64encode(meth_data).decode()
     pdf_href_header = f"data:application/pdf;base64,{b64_meth}"
 
-st.markdown(f"<div style='text-align: center; margin-bottom: 35px;'><a href='{pdf_href_header}' target='_blank' download='NUROS_Clinical_Methodology.pdf' style='color: #F7CAC9; text-decoration: none; font-weight: 600; padding: 8px 16px; background: rgba(247, 202, 201, 0.1); border: 1px solid rgba(247, 202, 201, 0.4); border-radius: 8px; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(247, 202, 201, 0.05); transition: all 0.2s;'>📋 Clinical Methodology Portal</a></div>", unsafe_allow_html=True)
+st.markdown(f"<div style='text-align: center; margin-bottom: 15px;'><a href='{pdf_href_header}' target='_blank' download='NUROS_Clinical_Methodology.pdf' style='color: #F7CAC9; text-decoration: none; font-weight: 600; padding: 8px 16px; background: rgba(247, 202, 201, 0.1); border: 1px solid rgba(247, 202, 201, 0.4); border-radius: 8px; font-size: 0.9em; box-shadow: inset 0 0 10px rgba(247, 202, 201, 0.05); transition: all 0.2s;'>📋 Clinical Methodology Portal</a></div>", unsafe_allow_html=True)
 
 
 # --- SESSION STATE INITIALIZATION ---
@@ -476,9 +476,37 @@ if st.session_state.step == 1:
     .nuros-logo {
         animation: logoJump 1.5s ease-in-out 0s 1, logoAscend 2s cubic-bezier(0.25, 1, 0.5, 1) 12.5s forwards !important;
     }
+    /* Animated NUROS Blocks */
+    @keyframes bounceColor {
+        0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+        50% { transform: translateY(-10px) scale(1.1); filter: brightness(1.5) drop-shadow(0 0 15px currentColor); }
+    }
+    .animated-letter {
+        display: inline-block;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin: 0 8px;
+        text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .animated-o {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.2rem;
+    }
     </style>
     """, unsafe_allow_html=True)
-    st.markdown("<div class='glass-card' style='position: relative; margin-top: 80px;'>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class='glass-card' style='position: relative; margin-top: 15px; margin-bottom: 25px; padding: 20px; display: flex; justify-content: center; align-items: center; background: rgba(11, 19, 43, 0.4); border: 1px solid rgba(247, 202, 201, 0.2);'>
+        <span class="animated-letter" style="color: #3A7CA5; animation: bounceColor 2s infinite 0.1s;">N</span>
+        <span class="animated-letter" style="color: #9013FE; animation: bounceColor 2s infinite 0.2s;">U</span>
+        <span class="animated-letter" style="color: #F7CAC9; animation: bounceColor 2s infinite 0.3s;">R</span>
+        <span class="animated-letter animated-o" style="animation: bounceColor 2s infinite 0.4s; filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));">🩺<span style="font-size: 2.2rem; margin-left: -5px;">👂</span></span>
+        <span class="animated-letter" style="color: #D4AF37; animation: bounceColor 2s infinite 0.5s;">S</span>
+    </div>
+    """, unsafe_allow_html=True)
     
     col_hdr, col_btn = st.columns([3, 1.2])
     with col_hdr:
