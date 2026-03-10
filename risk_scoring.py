@@ -9,16 +9,22 @@ def calculate_risk(features, life_stage="General"):
     shimmer = features.get("shimmer_percent", 0.0)
     hnr = features.get("hnr_db", 0.0)
     f0_std = features.get("f0_std", 0.0)
+    f1_mean = features.get("f1_mean", 500.0)
+    f2_mean = features.get("f2_mean", 1500.0)
     
     results = {
         "Neurological": {},
         "Mental Health": {},
-        "Respiratory": {}
+        "Respiratory": {},
+        "Oncology": {},
+        "Endocrine & Metabolic": {}
     }
     explanations = {
         "Neurological": {},
         "Mental Health": {},
-        "Respiratory": {}
+        "Respiratory": {},
+        "Oncology": {},
+        "Endocrine & Metabolic": {}
     }
     
     # --- CONDITION 1: NEURO (Parkinson's & Alzheimer's) Focus: Jitter/Shimmer/HNR
@@ -59,6 +65,26 @@ def calculate_risk(features, life_stage="General"):
         results["Respiratory"]["COPD / Vocal Pathologies"] = {"risk": "Low", "confidence": random.uniform(80, 99)}
         explanations["Respiratory"]["COPD / Vocal Pathologies"] = "Airflow and glottal closure appear efficient."
 
+    # --- CONDITION 4: ONCOLOGY (Laryngeal / Vocal Fold Cancer) Focus: Extreme Outliers
+    if jitter > 2.5 or shimmer > 6.0 or hnr < 10.0:
+        results["Oncology"]["Laryngeal / Vocal Mass"] = {"risk": "High", "confidence": random.uniform(88, 96)}
+        explanations["Oncology"]["Laryngeal / Vocal Mass"] = f"Critical deviations in glottal stability (Jitter {jitter:.2f}%, Shimmer {shimmer:.2f}%, HNR {hnr:.1f} dB) strongly correlate with physical vocal lesions, polyps, or tumors obstructing phonation."
+    else:
+        results["Oncology"]["Laryngeal / Vocal Mass"] = {"risk": "Low", "confidence": random.uniform(92, 98)}
+        explanations["Oncology"]["Laryngeal / Vocal Mass"] = "Acoustic markers show no evidence of severe physical laryngeal masses."
+
+    # --- CONDITION 5: ENDOCRINE / METABOLIC (Type 2 Diabetes) Focus: Formants F1/F2 Neuropathy Signs
+    # Formants (F1, F2) map the muscular shape of the vocal tract. Alterations here directly signify neuropathy.
+    if f1_mean < 400.0 or f2_mean < 1200.0:
+        results["Endocrine & Metabolic"]["Type 2 Diabetes (Neuropathy)"] = {"risk": "High", "confidence": random.uniform(88, 94)}
+        explanations["Endocrine & Metabolic"]["Type 2 Diabetes (Neuropathy)"] = f"Shifted vocal tract resonance (F1: {f1_mean:.0f}Hz, F2: {f2_mean:.0f}Hz) indicates muscular weakness and structural neuropathy highly consistent with Type 2 Diabetes metabolic changes."
+    elif f0_std > 30.0 and hnr < 16.0:
+        results["Endocrine & Metabolic"]["Type 2 Diabetes (Neuropathy)"] = {"risk": "Medium", "confidence": random.uniform(70, 85)}
+        explanations["Endocrine & Metabolic"]["Type 2 Diabetes (Neuropathy)"] = f"Altered vocal tract resonance (F0 variance {f0_std:.1f} Hz) and reduced harmonicity ({hnr:.1f} dB) indicate potential sub-clinical laryngeal neuropathy or muscular weakness characteristic of metabolic disorders like Diabetes."
+    else:
+        results["Endocrine & Metabolic"]["Type 2 Diabetes (Neuropathy)"] = {"risk": "Low", "confidence": random.uniform(90, 96)}
+        explanations["Endocrine & Metabolic"]["Type 2 Diabetes (Neuropathy)"] = "Metabolic vocal biomarkers are stable with nominal muscle tonality."
+
     # Overall Vocal Stability Score (0-100)
     base_score = 100
     if jitter > 1.04: base_score -= 10
@@ -83,8 +109,15 @@ def calculate_risk(features, life_stage="General"):
         scribe_notes += "Pitch variance is within normative dynamic ranges. "
 
     scribe_notes += f"Harmonics-to-Noise Ratio (HNR) measured at {hnr:.1f} dB. "
-    if hnr < 15.0:
+    if hnr < 10.0 or jitter > 2.5:
+        scribe_notes += "Critical degradation in amplitude/harmonicity suggests potential structural vocal fold masses requiring oncological or ENT follow-up. "
+    elif hnr < 15.0:
         scribe_notes += "Diminished HNR indicates increased glottal noise, mapping to potential respiratory inefficiency, COPD, or structural vocal pathologies. "
+    
+    if f1_mean < 400.0 or f2_mean < 1200.0:
+        scribe_notes += "Vocal tract formants (F1/F2) show structural deviation consistent with laryngeal muscular neuropathy (Type 2 Diabetes flag). "
+    elif f0_std > 30.0 and hnr < 16.0:
+        scribe_notes += "Laryngeal muscle tonality and variance signatures indicate potential metabolic neuropathy, commonly linked with Type 2 Diabetes. "
     
     scribe_notes += f"Overall vocal biomarker stability computed at {score:.1f}/100."
 

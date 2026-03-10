@@ -64,6 +64,20 @@ def extract_features(audio_path):
     harmonicity = call(snd, "To Harmonicity (cc)", 0.01, 75, 0.1, 1.0)
     hnr = call(harmonicity, "Get mean", 0, 0)
     
+    # ---------------------------------------------------------
+    # METABOLIC FORMANT ANALYSIS (Type 2 Diabetes / Neuropathy)
+    # ---------------------------------------------------------
+    # Analyze the original unfiltered sound to capture vocal tract shapes (Formants).
+    # Diabetes causes neuropathy which alters the muscular shape of the vocal tract.
+    snd_full = parselmouth.Sound(audio_path)
+    formants = call(snd_full, "To Formant (burg)", 0.0, 5, 5500, 0.025, 50)
+    try:
+        f1_mean = call(formants, "Get mean", 1, 0, 0, "Hertz")
+        f2_mean = call(formants, "Get mean", 2, 0, 0, "Hertz")
+    except:
+        f1_mean = 500.0
+        f2_mean = 1500.0
+    
     # Mocking slightly for consistent robust testing values if missing
     if np.isnan(jitter) or jitter < 0: jitter = 0.5
     if np.isnan(shimmer) or shimmer < 0: shimmer = 2.0
@@ -78,6 +92,8 @@ def extract_features(audio_path):
         "shimmer_percent": shimmer,
         "hnr_db": hnr,
         "f0_std": float(f0_std),
+        "f1_mean": float(f1_mean) if not np.isnan(f1_mean) else 500.0,
+        "f2_mean": float(f2_mean) if not np.isnan(f2_mean) else 1500.0,
         "mfcc_mean": mfcc_mean.tolist()
     }
     
