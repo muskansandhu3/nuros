@@ -446,12 +446,63 @@ def prev_step():
 
 # STEP 1: IDENTITY
 if st.session_state.step == 1:
-    st.markdown("<div class='glass-card'>", unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+    /* 1. Banner magically disappears with sparkles after 12s */
+    @keyframes burstAndVanish {
+        0% { opacity: 1; filter: brightness(1) contrast(1); transform: scale(1); }
+        70% { opacity: 1; filter: brightness(2) contrast(1.5) drop-shadow(0 0 30px #ffffff); transform: scale(1.02); }
+        85% { opacity: 0.9; filter: brightness(3) drop-shadow(0 0 60px #F7CAC9); transform: scale(1.05); }
+        100% { opacity: 0; filter: brightness(0); transform: scale(0.8) translateY(-30px); display: none; visibility: hidden; pointer-events: none; }
+    }
+    .engraved-banner-container {
+        animation: burstAndVanish 1.5s ease-in-out 12s forwards !important;
+    }
+    
+    /* 2. Logo becomes much bigger and takes the top place */
+    @keyframes logoAscend {
+        0% { transform: scale(1) translateY(0); }
+        100% { transform: scale(2.0) translateY(-140px); filter: drop-shadow(0 0 60px rgba(247, 202, 201, 1)) brightness(1.3); z-index: 999; position: relative; }
+    }
+    .nuros-logo {
+        animation: logoAscend 2s cubic-bezier(0.25, 1, 0.5, 1) 12.5s forwards !important;
+    }
+    
+    /* 3. AI Doctor appears beautifully on top of the contact/login button */
+    @keyframes slideInDoctor {
+        0% { opacity: 0; transform: translateY(40px) scale(0.9); pointer-events: none; }
+        100% { opacity: 1; transform: translateY(0) scale(1.1); filter: drop-shadow(0 15px 20px rgba(0,0,0,0.6)); pointer-events: auto; }
+    }
+    .ai-doc-avatar {
+        position: absolute;
+        bottom: 100%;
+        right: 15px; 
+        width: 170px;
+        height: auto;
+        z-index: 1000;
+        margin-bottom: -20px; /* Overlaps securely onto the button */
+        opacity: 0;
+        animation: slideInDoctor 2s cubic-bezier(0.16, 1, 0.3, 1) 13.5s forwards;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    st.markdown("<div class='glass-card' style='position: relative; margin-top: 80px;'>", unsafe_allow_html=True)
     
     col_hdr, col_btn = st.columns([3, 1.2])
     with col_hdr:
         st.markdown("<h3 style='margin: 0; padding-top: 8px;'>Secure Patient Portal</h3>", unsafe_allow_html=True)
     with col_btn:
+        import base64
+        doctor_img_path = "ai_doctor.png"
+        if os.path.exists(doctor_img_path):
+            with open(doctor_img_path, "rb") as dfile:
+                b64_doc = base64.b64encode(dfile.read()).decode()
+            st.markdown(f'''
+            <div style="position: relative; width: 100%; height: 0; overflow: visible;">
+                <img src="data:image/png;base64,{b64_doc}" class="ai-doc-avatar" alt="AI Doctor" />
+            </div>
+            ''', unsafe_allow_html=True)
+            
         if st.button("🔐 Secure Login", use_container_width=True):
             st.session_state.step = "auth_flow"
             st.rerun()
