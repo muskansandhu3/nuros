@@ -471,7 +471,7 @@ if st.session_state.step == 1:
     
     @keyframes logoAscend {
         0% { transform: scale(1) translateY(0); }
-        100% { transform: scale(1.8) translateY(-60px); filter: drop-shadow(0 0 60px rgba(247, 202, 201, 1)) brightness(1.3); z-index: 999; position: relative; }
+        100% { transform: scale(1.5) translateY(-10px); filter: drop-shadow(0 0 60px rgba(247, 202, 201, 1)) brightness(1.3); z-index: 999; position: relative; }
     }
     .nuros-logo {
         animation: logoJump 1.5s ease-in-out 0s 1, logoAscend 2s cubic-bezier(0.25, 1, 0.5, 1) 12.5s forwards !important;
