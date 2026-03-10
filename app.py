@@ -476,23 +476,6 @@ if st.session_state.step == 1:
     .nuros-logo {
         animation: logoJump 1.5s ease-in-out 0s 1, logoAscend 2s cubic-bezier(0.25, 1, 0.5, 1) 12.5s forwards !important;
     }
-    
-    /* 3. AI Doctor appears beautifully on top of the contact/login button */
-    @keyframes slideInDoctor {
-        0% { opacity: 0; transform: translateY(40px) scale(0.9); pointer-events: none; }
-        100% { opacity: 1; transform: translateY(0) scale(1.1); filter: drop-shadow(0 15px 20px rgba(0,0,0,0.6)); pointer-events: auto; }
-    }
-    .ai-doc-avatar {
-        position: absolute;
-        bottom: 100%;
-        right: 15px; 
-        width: 170px;
-        height: auto;
-        z-index: 1000;
-        margin-bottom: -20px; /* Overlaps securely onto the button */
-        opacity: 0;
-        animation: slideInDoctor 2s cubic-bezier(0.16, 1, 0.3, 1) 13.5s forwards;
-    }
     </style>
     """, unsafe_allow_html=True)
     st.markdown("<div class='glass-card' style='position: relative; margin-top: 80px;'>", unsafe_allow_html=True)
@@ -501,17 +484,6 @@ if st.session_state.step == 1:
     with col_hdr:
         st.markdown("<h3 style='margin: 0; padding-top: 8px;'>Secure Patient Portal</h3>", unsafe_allow_html=True)
     with col_btn:
-        import base64
-        doctor_img_path = "ai_doctor.png"
-        if os.path.exists(doctor_img_path):
-            with open(doctor_img_path, "rb") as dfile:
-                b64_doc = base64.b64encode(dfile.read()).decode()
-            st.markdown(f'''
-            <div style="position: relative; width: 100%; height: 0; overflow: visible;">
-                <img src="data:image/png;base64,{b64_doc}" class="ai-doc-avatar" alt="AI Doctor" />
-            </div>
-            ''', unsafe_allow_html=True)
-            
         if st.button("🔐 Secure Login", use_container_width=True):
             st.session_state.step = "auth_flow"
             st.rerun()
