@@ -1367,22 +1367,22 @@ if os.path.exists(doc_contact_path):
     .element-container:has(.contact-anchor) + .element-container {{
         overflow: visible !important;
     }}
-    /* The AI Doctor floating above the Contact Us Button */
+    /* The AI Doctor vertically behind the Contact Us Button */
     .element-container:has(.contact-anchor) + .element-container::before {{
         content: "";
         position: absolute;
-        bottom: 80%;
+        bottom: 50%;
         left: 50%;
         transform: translateX(-50%);
-        width: 130px;
-        height: 160px;
+        width: 140px;
+        height: 180px;
         background-image: url("data:image/png;base64,{b64_doc_contact}");
         background-size: contain;
         background-repeat: no-repeat;
         background-position: bottom center;
-        filter: drop-shadow(0 10px 15px rgba(0,0,0,0.6));
+        filter: drop-shadow(0 15px 15px rgba(0,0,0,0.8));
         pointer-events: none;
-        z-index: 10000;
+        z-index: -1;
     }}
     </style>
     ''', unsafe_allow_html=True)
