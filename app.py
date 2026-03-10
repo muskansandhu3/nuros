@@ -501,10 +501,15 @@ if st.session_state.step == 1:
     st.markdown("""
     <div class='glass-card' style='position: relative; margin-top: 15px; margin-bottom: 25px; padding: 20px; display: flex; justify-content: center; align-items: center; background: rgba(11, 19, 43, 0.4); border: 1px solid rgba(247, 202, 201, 0.2);'>
         <span class="animated-letter" style="color: #3A7CA5; animation: bounceColor 2s infinite 0.1s;">N</span>
-        <span class="animated-letter" style="color: #9013FE; animation: bounceColor 2s infinite 0.2s;">U</span>
-        <span class="animated-letter" style="color: #F7CAC9; animation: bounceColor 2s infinite 0.3s;">R</span>
-        <span class="animated-letter animated-o" style="animation: bounceColor 2s infinite 0.4s; filter: drop-shadow(0 0 10px rgba(255,255,255,0.4));">🩺<span style="font-size: 2.2rem; margin-left: -5px;">👂</span></span>
-        <span class="animated-letter" style="color: #D4AF37; animation: bounceColor 2s infinite 0.5s;">S</span>
+        <span class="animated-letter" style="color: #3A7CA5; animation: bounceColor 2s infinite 0.2s;">U</span>
+        <span class="animated-letter" style="color: #3A7CA5; animation: bounceColor 2s infinite 0.3s;">R</span>
+        
+        <span class="animated-letter animated-o" style="position: relative; width: 4rem; height: 4rem; margin: 0 10px; animation: bounceColor 2s infinite 0.4s;">
+            <span style="font-size: 4rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); filter: sepia(1) hue-rotate(60deg) saturate(500%) brightness(1.2);">🩺</span>
+            <span style="font-size: 1.4rem; position: absolute; top: 48%; left: 52%; transform: translate(-50%, -50%); filter: sepia(1) hue-rotate(60deg) saturate(500%) brightness(1.2);">👂</span>
+        </span>
+        
+        <span class="animated-letter" style="color: #3A7CA5; animation: bounceColor 2s infinite 0.5s;">S</span>
     </div>
     """, unsafe_allow_html=True)
     
