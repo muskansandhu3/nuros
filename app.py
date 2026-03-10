@@ -459,13 +459,22 @@ if st.session_state.step == 1:
         animation: burstAndVanish 1.5s ease-in-out 12s forwards !important;
     }
     
-    /* 2. Logo becomes much bigger and takes the top place */
+    /* 2. Logo jumps initially, then becomes much bigger and takes the top place */
+    @keyframes logoJump {
+        0% { transform: translateY(0); }
+        20% { transform: translateY(-25px); }
+        40% { transform: translateY(0); }
+        60% { transform: translateY(-15px); }
+        80% { transform: translateY(0); }
+        100% { transform: translateY(0); }
+    }
+    
     @keyframes logoAscend {
         0% { transform: scale(1) translateY(0); }
-        100% { transform: scale(2.0) translateY(-140px); filter: drop-shadow(0 0 60px rgba(247, 202, 201, 1)) brightness(1.3); z-index: 999; position: relative; }
+        100% { transform: scale(1.8) translateY(-60px); filter: drop-shadow(0 0 60px rgba(247, 202, 201, 1)) brightness(1.3); z-index: 999; position: relative; }
     }
     .nuros-logo {
-        animation: logoAscend 2s cubic-bezier(0.25, 1, 0.5, 1) 12.5s forwards !important;
+        animation: logoJump 1.5s ease-in-out 0s 1, logoAscend 2s cubic-bezier(0.25, 1, 0.5, 1) 12.5s forwards !important;
     }
     
     /* 3. AI Doctor appears beautifully on top of the contact/login button */
