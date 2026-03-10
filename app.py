@@ -1416,6 +1416,21 @@ if os.path.exists(doc_contact_path):
         pointer-events: none;
         z-index: -1;
     }}
+    
+    /* Responsive sizing for tablets and mobile */
+    @media (max-width: 768px) {{
+        .element-container:has(.contact-anchor) + .element-container::before {{
+            width: 110px;
+            height: 140px;
+        }}
+    }}
+    
+    @media (max-width: 480px) {{
+        .element-container:has(.contact-anchor) + .element-container::before {{
+            width: 90px;
+            height: 110px;
+        }}
+    }}
     </style>
     ''', unsafe_allow_html=True)
 
