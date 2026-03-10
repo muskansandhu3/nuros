@@ -1386,6 +1386,35 @@ def contact_dialog():
                 else:
                     st.warning("Please fill in Name, Email, and Message.")
 
+doc_contact_path = "ai_doctor_new.png"
+if os.path.exists(doc_contact_path):
+    with open(doc_contact_path, "rb") as dfile:
+        b64_doc_contact = base64.b64encode(dfile.read()).decode()
+    st.markdown(f'''
+    <style>
+    .element-container:has(.contact-anchor) + .element-container {{
+        overflow: visible !important;
+    }}
+    /* The AI Doctor floating above the Contact Us Button */
+    .element-container:has(.contact-anchor) + .element-container::before {{
+        content: "";
+        position: absolute;
+        bottom: 80%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 130px;
+        height: 160px;
+        background-image: url("data:image/png;base64,{b64_doc_contact}");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: bottom center;
+        filter: drop-shadow(0 10px 15px rgba(0,0,0,0.6));
+        pointer-events: none;
+        z-index: 10000;
+    }}
+    </style>
+    ''', unsafe_allow_html=True)
+
 st.markdown('<div class="contact-anchor"></div>', unsafe_allow_html=True)
 if st.button("💬 Contact Us"):
     contact_dialog()
