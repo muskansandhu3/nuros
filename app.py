@@ -516,9 +516,7 @@ if st.session_state.step == 1:
     with col_hdr:
         st.markdown("<h3 style='margin: 0; padding-top: 8px;'>Secure Patient Portal</h3>", unsafe_allow_html=True)
     with col_btn:
-        if st.button("🔐 Secure Login", use_container_width=True):
-            st.session_state.step = "auth_flow"
-            st.rerun()
+        st.link_button("🔐 Clinic Login", "https://nuroshealth.netlify.app/login", use_container_width=True)
             
     st.markdown("<hr style='border-color: rgba(247, 202, 201, 0.15); margin-top: 15px;'>", unsafe_allow_html=True)
     st.subheader("Step 1: Clinical History & Identity", anchor=False)
