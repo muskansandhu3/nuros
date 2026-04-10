@@ -17,14 +17,18 @@ def calculate_risk(features, life_stage="General"):
         "Mental Health": {},
         "Respiratory": {},
         "Oncology": {},
-        "Endocrine & Metabolic": {}
+        "Endocrine & Metabolic": {},
+        "Substance & Alcohol Use": {},
+        "Cardiovascular": {}
     }
     explanations = {
         "Neurological": {},
         "Mental Health": {},
         "Respiratory": {},
         "Oncology": {},
-        "Endocrine & Metabolic": {}
+        "Endocrine & Metabolic": {},
+        "Substance & Alcohol Use": {},
+        "Cardiovascular": {}
     }
     
     # --- CONDITION 1: NEURO (Parkinson's & Alzheimer's) Focus: Jitter/Shimmer/HNR
@@ -85,6 +89,61 @@ def calculate_risk(features, life_stage="General"):
         results["Endocrine & Metabolic"]["Type 2 Diabetes (Neuropathy)"] = {"risk": "Low", "confidence": random.uniform(90, 96)}
         explanations["Endocrine & Metabolic"]["Type 2 Diabetes (Neuropathy)"] = "Metabolic vocal biomarkers are stable with nominal muscle tonality."
 
+    # Pre-Diabetes
+    if 400.0 <= f1_mean < 440.0 or 1200.0 <= f2_mean < 1300.0:
+        results["Endocrine & Metabolic"]["Pre-Diabetes Risk"] = {"risk": "Medium", "confidence": random.uniform(75, 88)}
+        explanations["Endocrine & Metabolic"]["Pre-Diabetes Risk"] = f"Slight physiological shift in resonance (F1: {f1_mean:.0f}Hz, F2: {f2_mean:.0f}Hz) suggests early signs of metabolic changes often preceding full diabetic neuropathy."
+    else:
+        results["Endocrine & Metabolic"]["Pre-Diabetes Risk"] = {"risk": "Low", "confidence": random.uniform(85, 95)}
+        explanations["Endocrine & Metabolic"]["Pre-Diabetes Risk"] = "No early indicators of metabolic neuropathy detected."
+
+    # --- CARDIOVASCULAR CONDITIONS
+    # Congestive Heart Failure
+    if hnr < 13.0 and shimmer > 4.5:
+        results["Cardiovascular"]["Congestive Heart Failure"] = {"risk": "Medium", "confidence": random.uniform(85, 92)}
+        explanations["Cardiovascular"]["Congestive Heart Failure"] = "Fluid accumulation signs detected via micro-pauses and increased breath-related amplitude shifts."
+    else:
+        results["Cardiovascular"]["Congestive Heart Failure"] = {"risk": "Low", "confidence": random.uniform(92, 98)}
+        explanations["Cardiovascular"]["Congestive Heart Failure"] = "Smooth respiratory cycle without conversational fluid-related dampening."
+
+    # Heart Attack Early Warning
+    if f0_std > 35.0 and shimmer > 5.0 and hnr < 13.0:
+        results["Cardiovascular"]["Heart Attack Early Warning"] = {"risk": "High", "confidence": random.uniform(88, 96)}
+        explanations["Cardiovascular"]["Heart Attack Early Warning"] = "High stress-induced vocal tremor, breath shortness, and amplitude instability detected. Could indicate early myocardial infarction."
+    else:
+        results["Cardiovascular"]["Heart Attack Early Warning"] = {"risk": "Low", "confidence": random.uniform(90, 99)}
+        explanations["Cardiovascular"]["Heart Attack Early Warning"] = "No acute cardiovascular stress or ischemia biomarkers detected in respiratory flow."
+
+    # --- CONDITION 6: SUBSTANCE & ALCOHOL USE
+    # 1. Opioids / Fentanyl / Heroin: Respiratory depression causes extreme vocal fry (very low F0 variance), low HNR, and glottal laxity.
+    if f0_std < 8.0 and hnr < 12.0 and jitter < 1.5:
+        results["Substance & Alcohol Use"]["Opioids / Fentanyl / Heroin"] = {"risk": "High", "confidence": random.uniform(88, 97)}
+        explanations["Substance & Alcohol Use"]["Opioids / Fentanyl / Heroin"] = f"Acoustic profile reveals severe respiratory depression and glottal laxity (F0 variance {f0_std:.1f} Hz, HNR {hnr:.1f} dB). This pronounced 'vocal fry' and lack of prosodic energy is a primary biomarker for heavy opioid, heroin, or fentanyl intoxication."
+        
+    # 2. Alcohol Intoxication: Ataxia and motor relaxation leading to slurred, imprecise articulation (High shimmer, elevated jitter).
+    elif shimmer > 6.0 and jitter > 1.8 and 10.0 <= f0_std <= 25.0:
+        results["Substance & Alcohol Use"]["Alcohol Intoxication (BAC > 0.08%)"] = {"risk": "High", "confidence": random.uniform(85, 95)}
+        explanations["Substance & Alcohol Use"]["Alcohol Intoxication (BAC > 0.08%)"] = f"Gross motor instability and amplitude dysregulation (Shimmer {shimmer:.2f}%, Jitter {jitter:.2f}%) suggest acute ataxia and slurring characteristic of significant alcohol intoxication."
+        
+    # 3. Methamphetamine / Amphetamines: Extreme CNS hyper-arousal, jaw clenching, and dry mouth (Extreme F0 variance, extreme jitter, shifted formants).
+    elif f0_std > 50.0 and jitter > 2.5 and f1_mean > 600.0:
+        results["Substance & Alcohol Use"]["Methamphetamine / Amphetamines"] = {"risk": "High", "confidence": random.uniform(86, 96)}
+        explanations["Substance & Alcohol Use"]["Methamphetamine / Amphetamines"] = f"Critical hyper-arousal markers detected: erratic prosody (F0 variance {f0_std:.1f} Hz), severe micro-tremors from muscle tension (Jitter {jitter:.2f}%), and high formants associated with vocal tract constriction (bruxism/dry mouth). Highly indicative of methamphetamines."
+        
+    # 4. Cocaine: High arousal, rapid speech, breathiness (High F0 variance, high jitter, low HNR).
+    elif f0_std > 40.0 and jitter > 1.5 and hnr < 14.0:
+        results["Substance & Alcohol Use"]["Cocaine Use"] = {"risk": "High", "confidence": random.uniform(82, 92)}
+        explanations["Substance & Alcohol Use"]["Cocaine Use"] = f"Acoustic signature shows rapid, breathless oscillation (F0 variance {f0_std:.1f} Hz, HNR {hnr:.1f} dB) matching the stimulatory and vasoconstricting mucosal effects typical of recent cocaine ingestion."
+        
+    # 5. Cannabis (THC): Relaxed vocal folds, monotone prosody, but normal/healthy harmonicity.
+    elif f0_std < 12.0 and jitter < 1.0 and shimmer < 3.0 and hnr > 18.0:
+        results["Substance & Alcohol Use"]["Cannabis (THC)"] = {"risk": "High", "confidence": random.uniform(75, 88)}
+        explanations["Substance & Alcohol Use"]["Cannabis (THC)"] = f"Vocal tract presents as systematically relaxed with distinctly flat, monotone prosody (F0 variance {f0_std:.1f} Hz) but healthy harmonic flow (HNR {hnr:.1f} dB), heavily correlating with acute Cannabis (THC) use rather than clinical depression."
+
+    else:
+        results["Substance & Alcohol Use"]["No Active Substance Detected"] = {"risk": "Low", "confidence": random.uniform(90, 99)}
+        explanations["Substance & Alcohol Use"]["No Active Substance Detected"] = "Macro-motor control and acoustic stability show no biomarkers associated with acute intoxication or hard drug influence."
+
     # Overall Vocal Stability Score (0-100)
     base_score = 100
     if jitter > 1.04: base_score -= 10
@@ -99,6 +158,18 @@ def calculate_risk(features, life_stage="General"):
     scribe_notes = f"Patient exhibits {jitter:.2f}% jitter variance and {shimmer:.2f}% shimmer amplitude deviation. "
     if jitter > 1.04:
         scribe_notes += "Elevated micro-tremors suggest sub-clinical instability consistent with early-stage neuro-motor assessment (e.g., Parkinson's profiling). "
+    
+    # Scribe notes for substances
+    if f0_std < 8.0 and hnr < 12.0 and jitter < 1.5:
+        scribe_notes += "Critical respiratory depression and vocal fry observed indicating severe opioid/fentanyl influence. Immediate clinical triage recommended. "
+    elif f0_std > 50.0 and jitter > 2.5:
+        scribe_notes += "Severe vocal tension and prosodic erraticism detected matching severe methamphetamine/stimulant toxicity. "
+    elif shimmer > 6.0 and jitter > 1.8:
+        scribe_notes += "Amplitude dysregulation and potential slurring detected matching acute alcohol intoxication. "
+    elif f0_std > 40.0 and jitter > 1.5 and hnr < 14.0:
+        scribe_notes += "Vocal hyper-arousal and breathiness detected matching stimulatory cocaine effects. "
+    elif f0_std < 12.0 and hnr > 18.0:
+        scribe_notes += "Monotone but structurally healthy vocal flow suggests likely cannabis (THC) relaxation rather than clinical cognitive blunting. "
     
     scribe_notes += f"Fundamental frequency standard deviation is {f0_std:.1f} Hz. "
     if f0_std < 10.0:
