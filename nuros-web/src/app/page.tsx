@@ -1,58 +1,18 @@
-import Link from "next/link";
-import { Mic, ShieldCheck, Activity, Stethoscope, Database, ArrowRight } from "lucide-react";
+import React from "react";
+import { Mic, ShieldCheck, Activity, Stethoscope, Database } from "lucide-react";
+import HeroSection from "../components/HeroSection";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center py-0 relative overflow-hidden">
       
-      {/* Brand Header */}
-      <div className="text-center z-10 max-w-4xl mx-auto">
-        <div className="flex justify-center items-center mb-6">
-          <div className="relative flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-accent-teal to-accent-cyan shadow-[0_0_30px_rgba(8,247,206,0.3)]">
-            <Mic className="text-midnight-900 w-8 h-8 absolute animate-pulse" />
-          </div>
-          <h1 className="ml-4 text-5xl font-extrabold tracking-tight text-white glow-text">
-            Nuros <span className="font-light text-slate-300">AI</span>
-          </h1>
-        </div>
-        
-        <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 animate-fade-in-up">
-          Care While <span className="text-accent-teal">Waiting</span>
-        </h2>
-        
-        <p className="text-xl md:text-2xl text-slate-400 mb-12 max-w-2xl mx-auto font-light leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          A 20-second voice-based health intake that converts patient narratives into structured clinical triage reports. Secure, intelligent, and immediate.
-        </p>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <Link 
-            href="/patient" 
-            className="group relative flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-accent-teal hover:bg-[#06e3bd] text-midnight-900 font-semibold rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(8,247,206,0.2)] hover:shadow-[0_0_30px_rgba(8,247,206,0.5)] transform hover:-translate-y-1"
-          >
-            <Activity className="w-5 h-5 mr-3 group-hover:animate-pulse" />
-            Patient Check-In
-          </Link>
-
-          <Link 
-            href="/login" 
-            className="group relative flex items-center justify-center w-full sm:w-auto px-8 py-4 bg-midnight-800 hover:bg-midnight-700 text-white font-semibold rounded-xl border border-midnight-700 hover:border-slate-500 transition-all duration-300 transform hover:-translate-y-1"
-          >
-            <Stethoscope className="w-5 h-5 mr-3 text-accent-cyan" />
-            Doctor / Clinic Login
-          </Link>
-
-          <Link 
-            href="/admin" 
-            className="group hidden md:flex items-center justify-center w-full sm:w-auto px-6 py-4 text-slate-400 hover:text-white font-medium transition-colors"
-          >
-            Console <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 duration-300" />
-          </Link>
-        </div>
+      {/* Brand Header & Hero replaced with Animated HeroSection */}
+      <div className="w-full">
+        <HeroSection />
       </div>
 
       {/* Trust Bar */}
-      <div className="mt-24 pt-12 border-t border-midnight-700 w-full max-w-7xl px-4 z-10 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+      <div className="mt-12 pt-12 border-t border-midnight-700 w-full max-w-7xl px-4 z-10 animate-fade-in-up mb-24" style={{ animationDelay: '0.4s' }}>
         <p className="text-center text-sm font-semibold text-slate-500 mb-8 uppercase tracking-widest">
           Medical-Grade Architecture
         </p>
