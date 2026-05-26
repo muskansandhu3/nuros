@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Database, Server, RefreshCw, Send, CheckCircle2, AlertCircle, FileJson, User, Activity, ArrowRight } from 'lucide-react';
-import { NurosVocalData, mapToFHIRObservation, createDiagnosticReport } from '@/lib/fhir-connector';
+import { NurosVocalData, mapToFHIRObservation, createDiagnosticReport } from '@/lib/fhir/fhir-connector';
 
 type Patient = {
   id: string;

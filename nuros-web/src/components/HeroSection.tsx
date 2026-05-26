@@ -65,7 +65,7 @@ export default function HeroSection() {
           
           <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-8 animate-fade-in-up text-[#082d4b]" style={{ animationDelay: shouldReduceMotion ? '0s' : '0.2s' }}>
             Voice AI for <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0d6f91] to-[#4c8f18]">Early Health Risk Signals</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0d6f91] to-[#4c8f18]">Clinical Risk Screening</span>
           </h1>
           
           {/* Darkened text for WCAG AA compliance against light background */}
@@ -89,7 +89,7 @@ export default function HeroSection() {
               href="/patient" 
               className="group relative px-8 py-4 bg-accent-teal hover:bg-[#06e3bd] text-midnight-900 font-bold rounded-xl transition-all flex items-center justify-center shadow-[0_0_20px_rgba(8,247,206,0.3)] hover:shadow-[0_0_30px_rgba(8,247,206,0.5)] focus:outline-none focus:ring-4 focus:ring-accent-teal/50 min-h-[44px]"
             >
-              Get Voice Wellness Snapshot <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              Initiate Biomarker Triage <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
 
             {/* Tertiary Action / Informational */}

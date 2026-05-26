@@ -7,6 +7,9 @@ import { Mic, ArrowRight, ShieldCheck, CheckCircle, AlertTriangle, FileText, Act
 import dynamic from 'next/dynamic';
 import { initDb, getClinicByCode, addPatientIntake, Clinic } from '@/lib/mockDb';
 import PremiumReport from '@/components/PremiumReport';
+import DisclaimerBanner from '@/components/shared/DisclaimerBanner';
+import ConsentModal from '@/components/patient/ConsentModal';
+import { preparePayloadForAI } from '@/lib/privacy/privacy-mask';
 
 type Gender = "Female" | "Male" | "Other" | "Prefer not to say" | "";
 type YesNo = "Yes" | "No" | "Prefer not to say" | "";
@@ -27,6 +30,7 @@ function PatientWellnessSnapshotInner() {
   });
   
   // Recording State
+  const [showConsentModal, setShowConsentModal] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [timeLeft, setTimeLeft] = useState(20);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -56,6 +60,10 @@ function PatientWellnessSnapshotInner() {
   };
 
   const handleStartRecording = async () => {
+    if (!disclaimerAccepted) {
+      setShowConsentModal(true);
+      return;
+    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioChunksRef.current = [];
@@ -112,6 +120,13 @@ function PatientWellnessSnapshotInner() {
           clearInterval(interval);
           setTimeout(async () => {
             let userKey = `${formData.name}-${formData.age}`.toLowerCase();
+            
+            const safePayload = preparePayloadForAI({
+               clinicId: formData.clinicCode || 'GUEST',
+               patientId: userKey,
+               rawText: 'Simulated transcript: The patient states they have been feeling tired lately.'
+            });
+            console.log('[PRIVACY MASK] Patient data de-identified for AI analysis:', safePayload);
             
             // Find clinic and dispatch if provided
             if (formData.clinicCode) {
@@ -182,11 +197,22 @@ function PatientWellnessSnapshotInner() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#020617] to-[#081329] text-slate-100 font-sans pt-24 pb-20 flex flex-col items-center">
+    <div className="min-h-screen bg-gradient-to-b from-[#020617] to-[#081329] text-slate-100 font-sans flex flex-col">
+      <DisclaimerBanner />
+      <ConsentModal 
+        isOpen={showConsentModal} 
+        onAccept={() => {
+          setDisclaimerAccepted(true);
+          setShowConsentModal(false);
+          handleStartRecording();
+        }} 
+        onDecline={() => setShowConsentModal(false)} 
+      />
       
-      <div className="w-full max-w-4xl px-4 sm:px-6 relative z-10">
-        
-        {/* Progress Header */}
+      <div className="flex-1 pt-16 pb-20 flex flex-col items-center">
+        <div className="w-full max-w-4xl px-4 sm:px-6 relative z-10">
+          
+          {/* Progress Header */}
         <div className="mb-10 text-center">
           <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4">Patient Wellness Snapshot</h1>
           <div className="flex items-center justify-center space-x-2 text-xs font-semibold text-slate-400">
@@ -204,32 +230,19 @@ function PatientWellnessSnapshotInner() {
         <div className="bg-[#0b1021] border border-midnight-700 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden min-h-[500px] flex flex-col">
           <AnimatePresence mode="wait">
             
-            {/* STEP 1: Consent */}
+            {/* STEP 1 is removed to rely on ConsentModal. We'll show step 2 as step 1. But to avoid re-numbering state, let's keep state as is and just jump to step 2 initially, or rewrite. We'll just hide step 1. */}
             {step === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex-1 flex flex-col">
-                <div className="flex items-center text-accent-amber mb-6">
-                  <ShieldCheck className="w-8 h-8 mr-3" />
-                  <h2 className="text-2xl font-bold text-white">Consent & Disclaimer</h2>
+              <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex-1 flex flex-col items-center justify-center text-center">
+                <div className="flex items-center text-accent-cyan mb-6 justify-center">
+                  <Activity className="w-12 h-12 mr-3" />
                 </div>
-                <div className="bg-accent-amber/10 border border-accent-amber/30 rounded-xl p-6 mb-8 text-slate-300 leading-relaxed text-sm">
-                  <p className="mb-4">
-                    <strong>Nuros is not a diagnostic tool.</strong> This wellness snapshot does not detect, diagnose, treat, or predict disease.
-                  </p>
-                  <p>
-                    It provides general voice-based wellness signals that you may choose to discuss with your provider. By proceeding, you agree to submit a 20-second voice sample which will be securely transmitted to your clinic's dashboard.
-                  </p>
-                </div>
-                
-                <label className="flex items-center gap-[10px] cursor-pointer group mb-8">
-                  <input type="checkbox" className="w-5 h-5 accent-accent-teal rounded border-slate-600 cursor-pointer flex-shrink-0" checked={disclaimerAccepted} onChange={(e) => setDisclaimerAccepted(e.target.checked)} />
-                  <span className="text-sm font-medium text-slate-200 group-hover:text-white transition-colors leading-snug">I understand this is not medical advice and consent to processing.</span>
-                </label>
-
-                <div className="mt-auto flex justify-end">
-                  <button onClick={handleNext} disabled={!disclaimerAccepted} className="px-8 py-3 bg-accent-teal disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#06e3bd] text-midnight-900 font-bold rounded-xl transition-all flex items-center">
-                    Continue <ArrowRight className="w-5 h-5 ml-2" />
-                  </button>
-                </div>
+                <h2 className="text-3xl font-bold text-white mb-4">Clinical Risk Screening</h2>
+                <p className="text-slate-300 max-w-md mx-auto mb-8">
+                  Welcome to Nuros. We will capture a 20-second voice sample to analyze for potential vocal biomarker triage signals. 
+                </p>
+                <button onClick={handleNext} className="px-8 py-3 bg-accent-teal hover:bg-[#06e3bd] text-midnight-900 font-bold rounded-xl transition-all flex items-center mx-auto">
+                  Start Screening <ArrowRight className="w-5 h-5 ml-2" />
+                </button>
               </motion.div>
             )}
 
@@ -388,6 +401,7 @@ function PatientWellnessSnapshotInner() {
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,0 @@
-{
-  "buildCommand": "cd nuros-web && npm install && npm run build",
-  "outputDirectory": "nuros-web/.next"
-}

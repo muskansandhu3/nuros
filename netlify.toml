@@ -1,4 +1,0 @@
-[build]
-  base = "nuros-web"
-  command = "npm run build"
-  publish = ".next"

@@ -8,8 +8,8 @@ import {
   Copy, Download, User, Activity, Bot, ShieldAlert, ArrowLeft, Lock
 } from 'lucide-react';
 import { initDb, getClinicDashboardData, getActiveClinicId, Clinic } from '@/lib/mockDb';
-import { auditLogger } from '@/lib/audit-logs';
-import { mapToFHIRObservation, NurosVocalData } from '@/lib/fhir-connector';
+import { auditLogger } from '@/lib/audit-logger';
+import { mapToFHIRObservation, NurosVocalData } from '@/lib/fhir/fhir-connector';
 
 export default function DoctorDashboard() {
   const router = useRouter();
@@ -116,7 +116,7 @@ export default function DoctorDashboard() {
       {/* Main Table */}
       <div className="bg-[#0b1021] border border-white/5 rounded-2xl overflow-hidden shadow-xl">
         <div className="p-6 border-b border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <h2 className="text-xl font-bold text-white">Today's Patient Voice Intake Queue</h2>
+          <h2 className="text-xl font-bold text-white">Today's Patient Screening Queue</h2>
           <div className="flex gap-2">
             {['All', 'Low', 'Moderate', 'Elevated'].map(f => (
               <button key={f} onClick={() => setFilter(f)} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${filter === f ? 'bg-white text-slate-900' : 'bg-white/10 text-white hover:bg-white/20'}`}>{f}</button>
@@ -254,17 +254,17 @@ export default function DoctorDashboard() {
                  </table>
               </div>
 
-              {/* Research Signals (Doctor Only) */}
+              {/* Clinical Screening Signals (Doctor Only) */}
               <div className="bg-[#111827] border border-[#1e293b] rounded-2xl p-6 relative overflow-hidden">
                  <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none"><ShieldAlert className="w-32 h-32" /></div>
                  
                  <div className="flex items-center gap-2 text-indigo-400 font-bold uppercase tracking-widest text-xs mb-4">
                    <Lock className="w-4 h-4" /> Doctor View Only
                  </div>
-                 <h3 className="text-xl font-bold text-white mb-2">Advanced Clinical Research Signals</h3>
+                 <h3 className="text-xl font-bold text-white mb-2">Advanced Clinical Risk Screening Signals</h3>
                  
                  <div className="bg-amber-500/10 border border-amber-500/20 p-3 rounded-lg text-amber-200/80 text-xs leading-relaxed font-medium mb-6">
-                   Disclaimer: These research signals are not diagnoses. They are decision-support indicators that may help guide provider conversations and clinical judgment.
+                   Disclaimer: These screening signals are not diagnoses. They are decision-support indicators that may help guide provider conversations and clinical judgment.
                  </div>
 
                  <div className="grid sm:grid-cols-2 gap-4">

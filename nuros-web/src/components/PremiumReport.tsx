@@ -43,7 +43,7 @@ export default function PremiumReport({ formData, clinic, hasPreviousSnapshot, a
       color: 'border-cyan-500/30 bg-cyan-500/5',
       signals: [
         { name: "Shortness of Breath Risk", risk: "Moderate", confidence: 76, insight: "We detected slight breathiness. This can happen if you are tired or out of breath.", recommendation: "Take a few deep breaths. Monitor if you feel short of breath while walking." },
-        { name: "COPD & Lung Disease Pattern", risk: "Stable", confidence: 93, insight: "No signs of severe lung obstruction or COPD in your breathing patterns.", recommendation: "No action required." },
+        { name: "COPD & Lung Risk Pattern", risk: "Stable", confidence: 93, insight: "No signs of severe lung obstruction or COPD in your breathing patterns.", recommendation: "No action required." },
         { name: "Breathing Effort", risk: "Stable", confidence: 85, insight: "It sounds like you are breathing comfortably without extra effort.", recommendation: "No action required." },
         { name: "Lung Capacity Proxy", risk: "Stable", confidence: 88, insight: "You appear to have enough air in your lungs to speak comfortably.", recommendation: "No action required." }
       ]
@@ -206,10 +206,10 @@ export default function PremiumReport({ formData, clinic, hasPreviousSnapshot, a
          </div>
       </div>
 
-      {/* Disease-Signal Categories */}
+      {/* Clinical Risk Screening Categories */}
       <div className="mb-10">
          <h3 className="text-xl font-bold text-white mb-6 flex items-center border-b border-white/5 pb-2">
-            2. Clinical Biomarker Categories
+            2. Clinical Risk Screening Categories
          </h3>
          
          <div className="space-y-4">

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ShieldCheck, Loader2, Activity } from 'lucide-react';
-import { auditLogger } from '@/lib/audit-logs';
+import { auditLogger } from '@/lib/audit-logger';
 
 export default function SmartOnFhirLaunch() {
   const router = useRouter();
