@@ -1,3 +1,4 @@
+// Trigger fresh production build to bind custom domain
 import React from "react";
 import { Mic, ShieldCheck, Activity, Stethoscope, Database } from "lucide-react";
 import HeroSection from "../components/HeroSection";
