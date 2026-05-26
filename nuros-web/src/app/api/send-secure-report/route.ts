@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
+import path from 'path';
 
 export async function POST(request: Request) {
   try {
@@ -63,14 +64,14 @@ export async function POST(request: Request) {
     // Send Email 1 with PDF
     let attachments: any[] = [];
     try {
-      const pdfPath = '/Users/muskansandhu/Downloads/Nuros_Clinical_Signal_Snapshot_Fixed.pdf';
+      const pdfPath = path.join(process.cwd(), 'public', 'Nuros_Clinical_Signal_Snapshot_Fixed.pdf');
       if (fs.existsSync(pdfPath)) {
          attachments.push({
             filename: 'Nuros_Clinical_Signal_Snapshot.pdf',
             content: fs.readFileSync(pdfPath)
          });
       } else {
-         console.warn("Could not find the hardcoded PDF in Downloads folder.");
+         console.warn("Could not find the PDF in public folder.");
       }
     } catch (e) {
       console.error("Error reading PDF:", e);
